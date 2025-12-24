@@ -724,6 +724,64 @@
             background: rgba(255,255,255,0.05);
         }
         
+        /* Scroll to Top FAB */
+        .scroll-top-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: var(--accent-color);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+                        opacity 0.3s ease,
+                        background 0.2s ease;
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .scroll-top-fab.visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        .scroll-top-fab.scrolling {
+            transform: scale(0.7);
+        }
+
+        .scroll-top-fab:not(.scrolling) {
+            transform: scale(1);
+        }
+
+        .scroll-top-fab:active {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* Pulse animation when first appearing */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .scroll-top-fab.visible:not(.scrolling) {
+            animation: pulse 0.5s ease-out;
+        }
+
         /* Visibility Toggle Button */
         .visibility-toggle {
             background: rgba(255, 255, 255, 0.15);
@@ -1130,9 +1188,9 @@
             <h2>Shift Records</h2>
         </div>
         <div class="data-controls">
-            <button class="btn btn-secondary" onclick="exportData()" style="font-size: 14px; padding: 10px;">📤 Export Shift Record</button>
-            <button class="btn btn-secondary" onclick="triggerImport()" style="font-size: 14px; padding: 10px;">📥 Import Shift Reocrd</button>
-            <button class="btn btn-primary" onclick="showPage('salary-page')" style="font-size: 14px; padding: 10px;">💰 Salary Record</button>
+            <button class="btn btn-secondary" onclick="exportData()" style="font-size: 14px; padding: 10px;">📤 Export</button>
+            <button class="btn btn-secondary" onclick="triggerImport()" style="font-size: 14px; padding: 10px;">📥 Import</button>
+            <button class="btn btn-primary" onclick="showPage('salary-page')" style="font-size: 14px; padding: 10px;">💰 Salary</button>
             <input type="file" id="import-file" accept=".json" onchange="importData(this)">
         </div>
         <div class="filter-section">
@@ -1165,6 +1223,11 @@
             <input type="hidden" id="sort-order-val" value="desc">
         </div>
         <div id="records-list"></div>
+        
+        <!-- Scroll to Top Button -->
+        <button class="scroll-top-fab" id="scroll-top-btn" onclick="scrollToTop()">
+            ↑
+        </button>
     </div>
 
     <!-- 5. Salary Dashboard Page -->
@@ -1447,13 +1510,14 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadSettings();
             loadSalaryVisibility();
-            loadSalarySort(); // Add this line
+            loadSalarySort();
             updateContinueButton();
             updateMorningBriefingVisibility();
             checkFirstTimeSetup();
             checkMonthlySalary();
             updateSalaryDisplay();
             updateSalaryConfigDisplay();
+            initScrollToTop(); // Add this line
 
             history.replaceState({page: 'welcome-page'}, '', '');
             window.onpopstate = function(event) {
@@ -2019,7 +2083,6 @@
             }
         }
 
-        /* --- NAVIGATION LOGIC --- */
         function showPage(pageId, addHistory = true) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -2028,6 +2091,9 @@
             if(pageId === 'records-page') {
                 populateYearFilter();
                 renderRecords();
+                setTimeout(initScrollToTop, 100);
+            } else {
+                hideScrollTopButton();
             }
 
             if(pageId === 'salary-page') {
@@ -2806,6 +2872,63 @@
             };
             reader.readAsText(file);
         }
+
+        /* --- SCROLL TO TOP FUNCTIONALITY --- */
+        let scrollTimeout = null;
+
+        function initScrollToTop() {
+            const recordsPage = document.getElementById('records-page');
+            const scrollTopButton = document.getElementById('scroll-top-btn');
+            
+            if (!recordsPage || !scrollTopButton) {
+                console.log('Elements not found');
+                return;
+            }
+            
+            // Always show button on records page
+            scrollTopButton.classList.add('visible');
+            
+            // Add scroll listener
+            recordsPage.addEventListener('scroll', function() {
+                handleRecordsScroll();
+            });
+        }
+
+        function handleRecordsScroll() {
+            const scrollTopButton = document.getElementById('scroll-top-btn');
+            if (!scrollTopButton) return;
+            
+            // Add scrolling class (minimizes button)
+            scrollTopButton.classList.add('scrolling');
+            
+            // Clear existing timeout
+            if (scrollTimeout) {
+                clearTimeout(scrollTimeout);
+            }
+            
+            // Remove scrolling class after user stops scrolling
+            scrollTimeout = setTimeout(() => {
+                scrollTopButton.classList.remove('scrolling');
+            }, 150);
+        }
+
+        function scrollToTop() {
+            const recordsPage = document.getElementById('records-page');
+            if (!recordsPage) return;
+            
+            recordsPage.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function hideScrollTopButton() {
+            const scrollTopButton = document.getElementById('scroll-top-btn');
+            if (scrollTopButton) {
+                scrollTopButton.classList.remove('visible');
+            }
+        }
+
         /* --- SALARY VISIBILITY TOGGLE --- */
         const SALARY_VISIBLE_KEY = 'cae_salary_visible';
         let salaryVisible = true;
