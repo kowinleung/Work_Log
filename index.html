@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Simulator Shift Log</title>
+    <title>Shift Logger</title>
     <style>
         :root {
             --bg-color: #06103D;
@@ -28,7 +28,7 @@
             display: flex;
             flex-direction: column;
             overflow-x: hidden;
-            -webkit-overflow-scrolling: touch; 
+            -webkit-overflow-scrolling: touch;
         }
 
         /* --- Layout & Navigation --- */
@@ -47,8 +47,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* --- Welcome Page --- */
@@ -56,7 +62,17 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            position: relative; /* For absolute positioning of settings btn */
+            position: relative;
+        }
+
+        #welcome-page > * {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        #welcome-page .settings-fab {
+            width: 50px;
+            max-width: 50px;
         }
 
         .logo-container {
@@ -87,6 +103,39 @@
             font-size: 1.5rem;
         }
 
+        /* Salary Summary Card */
+        #salary-summary-widget {
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .salary-summary {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.05));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .salary-amount {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #10b981;
+            margin: 5px 0;
+        }
+
+        .salary-details {
+            font-size: 0.85rem;
+            color: #d1d5db;
+            margin-top: 8px;
+        }
+
         /* --- Settings Button (Floating) --- */
         .settings-fab {
             position: absolute;
@@ -107,7 +156,10 @@
             transition: transform 0.2s;
             z-index: 10;
         }
-        .settings-fab:active { transform: scale(0.9); }
+
+        .settings-fab:active {
+            transform: scale(0.9);
+        }
 
         /* --- Toggle Switch Styles --- */
         .settings-item {
@@ -119,8 +171,17 @@
             align-items: center;
             margin-bottom: 15px;
         }
-        .settings-label { font-size: 1rem; font-weight: 500; }
-        .settings-sub { font-size: 0.8rem; color: #aaa; margin-top: 5px; }
+
+        .settings-label {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .settings-sub {
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
 
         .switch {
             position: relative;
@@ -128,15 +189,25 @@
             width: 50px;
             height: 28px;
         }
-        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
         .slider {
             position: absolute;
             cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background-color: rgba(255,255,255,0.2);
             transition: .4s;
             border-radius: 34px;
         }
+
         .slider:before {
             position: absolute;
             content: "";
@@ -148,9 +219,33 @@
             transition: .4s;
             border-radius: 50%;
         }
-        input:checked + .slider { background-color: var(--accent-color); }
-        input:checked + .slider:before { transform: translateX(22px); }
 
+        input:checked + .slider {
+            background-color: var(--accent-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* Radio buttons for salary setup */
+        .radio-group {
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .radio-option {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .radio-option input {
+            margin-right: 10px;
+        }
 
         /* --- Forms & Inputs --- */
         .form-group {
@@ -178,7 +273,12 @@
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        input[type="date"], input[type="text"], select, textarea, input[type="search"] {
+        input[type="date"],
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea,
+        input[type="search"] {
             width: 100%;
             padding: 16px;
             background-color: var(--input-bg);
@@ -201,7 +301,7 @@
         }
 
         select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"%3e%3cpolyline points="6 9 12 15 18 9"%3e%3c/polyline%3e%3c/svg%3e');
             background-repeat: no-repeat;
             background-position: right 15px center;
             background-size: 16px;
@@ -221,11 +321,12 @@
             padding: 15px 0;
         }
 
-        input::placeholder, textarea::placeholder {
+        input::placeholder,
+        textarea::placeholder {
             color: rgba(255, 255, 255, 0.5);
         }
 
-        /* --- Shift Selector (Tiles) --- */
+        /* --- Shift Selector Tiles --- */
         .shift-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
@@ -249,9 +350,22 @@
             box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
         }
 
-        .shift-card .title { font-size: 12px; font-weight: bold; display: block; margin-top: 5px;}
-        .shift-card .icon { font-size: 24px; }
-        .shift-card .time { font-size: 10px; opacity: 0.7; display: block; }
+        .shift-card .title {
+            font-size: 12px;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .shift-card .icon {
+            font-size: 24px;
+        }
+
+        .shift-card .time {
+            font-size: 10px;
+            opacity: 0.7;
+            display: block;
+        }
 
         /* --- Activity Logger Styles --- */
         .activity-builder {
@@ -284,7 +398,7 @@
             font-size: 0.9rem;
             border-left: 3px solid var(--accent-color);
         }
-        
+
         .activity-text {
             flex-grow: 1;
             white-space: pre-wrap;
@@ -314,7 +428,7 @@
             cursor: pointer;
             font-size: 0.8rem;
         }
-        
+
         .activity-controls button.delete-btn {
             background: rgba(239, 68, 68, 0.2);
             color: #fca5a5;
@@ -333,16 +447,44 @@
             text-align: center;
             transition: opacity 0.2s;
         }
-        .btn:active { opacity: 0.8; }
 
-        .btn-primary { background-color: var(--accent-color); color: white; }
-        .btn-secondary { background-color: transparent; border: 2px solid rgba(255,255,255,0.3); color: white; }
-        .btn-danger { background-color: var(--danger-color); color: white; }
-        .btn-add { background-color: var(--success-color); color: white; margin-top: 10px; }
-        .btn-update { background-color: var(--accent-color); color: white; margin-top: 10px; }
+        .btn:active {
+            opacity: 0.8;
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-add {
+            background-color: var(--success-color);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .btn-update {
+            background-color: var(--accent-color);
+            color: white;
+            margin-top: 10px;
+        }
 
         /* File Inputs (Hidden) */
-        #import-file, #act-photo-input { display: none; }
+        #import-file,
+        #act-photo-input {
+            display: none;
+        }
 
         /* --- Photo Upload UI --- */
         .photo-upload-area {
@@ -354,7 +496,7 @@
             align-items: center;
             justify-content: space-between;
         }
-        
+
         .photo-btn {
             background: transparent;
             border: 1px dashed #8da4ef;
@@ -371,7 +513,7 @@
             height: 60px;
             display: none;
         }
-        
+
         .photo-preview-container img {
             width: 100%;
             height: 100%;
@@ -381,7 +523,8 @@
 
         .remove-photo-btn {
             position: absolute;
-            top: -5px; right: -5px;
+            top: -5px;
+            right: -5px;
             background: var(--danger-color);
             color: white;
             border-radius: 50%;
@@ -402,15 +545,28 @@
             padding: 15px;
             margin-bottom: 15px;
         }
-        .record-header { display: flex; justify-content: space-between; color: var(--accent-color); font-weight: bold; margin-bottom: 5px; }
-        
-        .record-content { 
-            white-space: pre-wrap; 
-            font-size: 0.9em; 
-            line-height: 1.5; 
-            color: #ddd; 
+
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 5px;
         }
-        
+
+        .record-header span:last-child {
+            white-space: nowrap;
+            font-size: 0.85em;
+            text-align: right;
+        }
+
+        .record-content {
+            white-space: pre-wrap;
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: #ddd;
+        }
+
         .log-title {
             color: #fff;
             font-weight: 700;
@@ -431,13 +587,25 @@
             cursor: pointer;
         }
 
-        .record-actions { margin-top: 10px; display: flex; justify-content: flex-end; gap: 10px; }
-        .btn-sm { padding: 5px 12px; font-size: 12px; width: auto; border-radius: 6px; }
+        .record-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+            width: auto;
+            border-radius: 6px;
+        }
 
         .data-controls {
             margin-bottom: 20px;
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .filter-section {
@@ -453,8 +621,8 @@
             gap: 10px;
             margin-top: 10px;
         }
-        
-        .filter-row select { 
+
+        .filter-row select {
             width: 50%;
         }
 
@@ -479,30 +647,263 @@
             letter-spacing: 0.5px;
         }
 
-        .sort-btn:active { opacity: 0.7; }
+        .sort-btn:active {
+            opacity: 0.7;
+        }
+
+        /* Salary Dashboard Styles */
+        .salary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-top: 5px;
+        }
+
+        .salary-table {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+
+        .salary-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .salary-table th,
+        .salary-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .salary-table th {
+            color: #8da4ef;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .salary-table td {
+            color: #ddd;
+        }
+
+        .salary-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .salary-table tbody tr {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .salary-table tbody tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* Visibility Toggle Button */
+        .visibility-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .visibility-toggle:active {
+            transform: scale(0.95);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        /* Sortable Table Headers */
+        .salary-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .salary-table th.sortable:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .salary-table th.sortable:active {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .salary-table th span {
+            margin-left: 5px;
+            font-size: 0.8em;
+            color: #6b7280;
+        }
+
+        .salary-table th span.active {
+            color: var(--accent-color);
+        }
+
+        /* Month Detail Styles */
+        .detail-section {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .detail-section h4 {
+            margin: 0 0 10px 0;
+            color: #8da4ef;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row.total {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--success-color);
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .adjustment-item {
+            background: var(--card-bg);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .adjustment-item.positive {
+            border-left: 3px solid var(--success-color);
+        }
+
+        .adjustment-item.negative {
+            border-left: 3px solid var(--danger-color);
+        }
+
+        .adjustment-info {
+            flex-grow: 1;
+        }
+
+        .adjustment-type {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .adjustment-desc {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 2px;
+        }
+
+        .adjustment-amount {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+
+        .adjustment-amount.positive {
+            color: var(--success-color);
+        }
+
+        .adjustment-amount.negative {
+            color: var(--danger-color);
+        }
 
         /* --- Modal --- */
         .modal {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0,0,0,0.8);
             z-index: 100;
             align-items: center;
             justify-content: center;
         }
+
         .modal-content {
             background: #1a224a;
             padding: 25px;
             border-radius: 16px;
             width: 85%;
-            max-width: 320px;
+            max-width: 400px;
             text-align: center;
+            max-height: 80vh;
+            overflow-y: auto;
         }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 20px; }
 
-        .page-header { display: flex; align-items: center; margin-bottom: 20px; }
-        .back-btn { background: none; border: none; color: white; font-size: 24px; margin-right: 15px; padding: 0; cursor: pointer; }
+        .modal-content.large {
+            max-width: 500px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            margin-right: 15px;
+            padding: 0;
+            cursor: pointer;
+        }
 
         /* Image Viewer Modal */
         #img-modal .modal-content {
@@ -516,12 +917,14 @@
             justify-content: center;
             align-items: center;
         }
+
         #img-modal img {
             max-width: 95%;
             max-height: 80%;
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
+
         #img-modal-close {
             position: absolute;
             top: 20px;
@@ -542,29 +945,41 @@
     </style>
 </head>
 <body>
-
     <!-- 1. Welcome Page -->
     <div id="welcome-page" class="page active">
         <div class="logo-container">
             <div class="logo-placeholder">✈️</div>
         </div>
         <h1>Work Logging System</h1>
-        
+
+        <!-- Salary Summary (if hourly enabled) -->
+        <div id="salary-summary-widget" style="display:none;">
+            <div class="salary-summary">
+                <h3 id="current-month-label">Current Month</h3>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
+                    <div class="salary-amount" id="current-salary-amount">HKD$ 0</div>
+                    <button class="visibility-toggle" onclick="toggleSalaryVisibility()" id="salary-visibility-btn">
+                        👁️
+                    </button>
+                </div>
+                <div class="salary-details" id="salary-details-text">0 hours worked</div>
+            </div>
+        </div>
+
         <button class="btn btn-primary" onclick="onStartShift()">Start Shift</button>
         <button id="continue-btn" class="btn btn-secondary" style="display:none" onclick="continueShift()">Continue Shift</button>
         <button class="btn btn-secondary" onclick="showPage('records-page')">Shift Record</button>
 
-        <!-- New: Settings FAB -->
+        <!-- New Settings FAB -->
         <button class="settings-fab" onclick="showPage('settings-page')">⚙️</button>
     </div>
 
-    <!-- 4. Settings Page (NEW) -->
+    <!-- 4. Settings Page -->
     <div id="settings-page" class="page">
         <div class="page-header">
             <button class="back-btn" onclick="showPage('welcome-page')">←</button>
             <h2>Settings</h2>
         </div>
-
         <div class="settings-item">
             <div>
                 <div class="settings-label">Auto-Export Records</div>
@@ -576,8 +991,18 @@
             </label>
         </div>
 
+        <!-- Salary Settings -->
+        <div class="settings-item" style="display: block;">
+            <div>
+                <div class="settings-label">💰 Salary Configuration</div>
+                <div class="settings-sub" id="salary-config-display">Not configured</div>
+            </div>
+            <button class="btn btn-secondary" style="margin-top: 10px;" onclick="showSalarySetup()">Reconfigure Salary</button>
+            <button class="btn btn-secondary" style="margin-top: 5px; font-size: 0.85rem; padding: 10px;" onclick="recalculateAllHistory()">Recalculate History</button>
+        </div>
+
         <div style="margin-top:20px; opacity:0.6; font-size:0.8rem; text-align:center;">
-            Version 1.2<br>Simulator Shift Log
+            Version 1.5<br>Shift Logger
         </div>
     </div>
 
@@ -613,11 +1038,11 @@
 
         <div class="form-group">
             <label>Activity Log</label>
-            
+
             <div class="activity-builder">
                 <input type="hidden" id="edit-activity-index" value="-1">
                 <input type="hidden" id="act-photo-data" value="">
-                
+
                 <select id="act-type" onchange="updateFormFields()">
                     <option value="">-- Select Activity Type --</option>
                     <option value="Morning Briefing">Morning Briefing</option>
@@ -676,7 +1101,6 @@
                 <div class="photo-upload-area">
                     <button class="photo-btn" onclick="document.getElementById('act-photo-input').click()">📷 Attach Photo</button>
                     <input type="file" id="act-photo-input" accept="image/*" onchange="handlePhotoUpload(this)">
-                    
                     <div id="photo-preview-box" class="photo-preview-container">
                         <img id="photo-preview-img" src="" alt="Preview" onclick="showImgModal(this.src)">
                         <button class="remove-photo-btn" onclick="removePhoto()">×</button>
@@ -705,16 +1129,14 @@
             <button class="back-btn" onclick="history.back()">←</button>
             <h2>Shift Records</h2>
         </div>
-
         <div class="data-controls">
-            <button class="btn btn-secondary" onclick="exportData()" style="font-size: 14px; padding: 10px;">📤 Export</button>
-            <button class="btn btn-secondary" onclick="triggerImport()" style="font-size: 14px; padding: 10px;">📥 Import</button>
+            <button class="btn btn-secondary" onclick="exportData()" style="font-size: 14px; padding: 10px;">📤 Export Shift Record</button>
+            <button class="btn btn-secondary" onclick="triggerImport()" style="font-size: 14px; padding: 10px;">📥 Import Shift Reocrd</button>
+            <button class="btn btn-primary" onclick="showPage('salary-page')" style="font-size: 14px; padding: 10px;">💰 Salary Record</button>
             <input type="file" id="import-file" accept=".json" onchange="importData(this)">
         </div>
-
         <div class="filter-section">
             <input type="search" id="search-input" placeholder="🔍 Search records..." onkeyup="renderRecords()">
-            
             <div class="filter-row">
                 <select id="filter-year" onchange="renderRecords()">
                     <option value="">All Years</option>
@@ -736,19 +1158,72 @@
                 </select>
             </div>
         </div>
-
         <div class="sort-bar">
             <button id="sort-toggle-btn" class="sort-btn" onclick="toggleSortOrder()">
                 Sort by Date <span id="sort-icon">↓</span>
             </button>
             <input type="hidden" id="sort-order-val" value="desc">
         </div>
-
         <div id="records-list"></div>
     </div>
 
+    <!-- 5. Salary Dashboard Page -->
+    <div id="salary-page" class="page">
+        <div class="page-header">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <h2>Salary Dashboard</h2>
+        </div>
+
+        <div id="salary-not-configured" style="text-align:center; padding:40px;">
+            <p style="color:#9ca3af;">Salary tracking is not configured.</p>
+            <button class="btn btn-primary" onclick="showSalarySetup()">Configure Now</button>
+        </div>
+
+        <div id="salary-dashboard-content" style="display:none;">
+            <!-- Total Earnings Card -->
+            <div class="salary-summary" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05)); border-color: rgba(59, 130, 246, 0.3); margin-bottom: 20px;">
+                <h3 style="color: #93c5fd;">TOTAL EARNINGS</h3>
+                <div class="salary-amount" style="color: #3b82f6;" id="total-earnings-amount">HKD$ 0</div>
+                <div class="salary-details" id="total-earnings-details">All time</div>
+            </div>
+
+            <div class="salary-stats">
+                <div class="stat-card">
+                    <h4>This Month</h4>
+                    <div class="value" id="stat-current-hours">0 hrs</div>
+                </div>
+                <div class="stat-card">
+                    <h4>This Month</h4>
+                    <div class="value" id="stat-current-salary">HKD$ 0</div>
+                </div>
+            </div>
+
+            <div class="salary-table">
+                <h3 style="margin-top:0;">Monthly History</h3>
+                <p style="font-size:0.85rem; color:#9ca3af; margin-top:0;">Tap any month to view details</p>
+                <table id="salary-history-table">
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortSalaryTable('month')">
+                                Month <span id="sort-month-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortSalaryTable('hours')">
+                                Hours <span id="sort-hours-icon"></span>
+                            </th>
+                            <th class="sortable" onclick="sortSalaryTable('salary')">
+                                Salary <span id="sort-salary-icon"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="salary-history-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
     <!-- --- Modals --- -->
-    
     <!-- Image Modal -->
     <div id="img-modal" class="modal" onclick="closeImgModal()">
         <div class="modal-content">
@@ -811,65 +1286,189 @@
         </div>
     </div>
 
+    <!-- Salary Setup Modal -->
+    <div id="salary-setup-modal" class="modal">
+        <div class="modal-content">
+            <h3>Salary Configuration</h3>
+            <p style="font-size:0.9rem; color:#9ca3af;">How is your salary calculated?</p>
+            
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="payment-type" value="monthly" onchange="toggleSalaryFields()">
+                    Monthly (fixed amount)
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="payment-type" value="hourly" onchange="toggleSalaryFields()">
+                    Hourly
+                </label>
+            </div>
+
+            <div id="hourly-fields" style="display:none;">
+                <div class="form-group">
+                    <label>Hourly Rate (HKD$)</label>
+                    <input type="number" id="hourly-rate" placeholder="e.g., 80" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Night Shift Allowance (HKD$)</label>
+                    <input type="number" id="night-allowance" placeholder="e.g., 200" min="0" step="0.01">
+                    <small style="color:#9ca3af; font-size:0.8rem;">Flat bonus per night shift</small>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeSalarySetup()">Skip</button>
+                <button class="btn btn-primary" onclick="saveSalaryConfig()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Salary Summary Modal -->
+    <div id="monthly-summary-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="summary-month-title">Monthly Summary</h3>
+            <div style="text-align:left; margin:20px 0;">
+                <p id="summary-hours-text" style="margin:5px 0;"></p>
+                <p id="summary-shifts-text" style="margin:5px 0; font-size:0.9rem; color:#9ca3af;"></p>
+            </div>
+            <div class="salary-amount" id="summary-salary-amount" style="margin:20px 0;">HKD$ 0</div>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeMonthlySummary()">OK</button>
+                <button class="btn btn-primary" onclick="viewSalaryDashboard()">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Month Detail Modal -->
+    <div id="month-detail-modal" class="modal">
+        <div class="modal-content large">
+            <h3 id="detail-month-title">Month Details</h3>
+            
+            <div class="detail-section">
+                <h4>Shift Breakdown</h4>
+                <div id="shift-breakdown"></div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Base Salary</h4>
+                <div class="detail-row">
+                    <span>Total Hours</span>
+                    <span id="detail-total-hours">0 hrs</span>
+                </div>
+                <div class="detail-row">
+                    <span>Base Pay</span>
+                    <span id="detail-base-pay">HKD$ 0</span>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>Adjustments</h4>
+                <div id="adjustments-list"></div>
+                <button class="btn btn-add" style="margin-top:10px; padding:10px; font-size:0.9rem;" onclick="showAddAdjustmentModal()">+ Add Adjustment</button>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-row total">
+                    <span>Total Salary</span>
+                    <span id="detail-total-salary">HKD$ 0</span>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeMonthDetail()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Adjustment Modal -->
+    <div id="add-adjustment-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="adjustment-modal-title">Add Adjustment</h3>
+            
+            <div class="form-group">
+                <label>Type</label>
+                <select id="adjustment-type">
+                    <option value="Overtime">Overtime</option>
+                    <option value="Reimbursement">Reimbursement</option>
+                    <option value="Bonus">Bonus</option>
+                    <option value="Deduction">Deduction</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Amount (HKD$)</label>
+                <input type="number" id="adjustment-amount" placeholder="Enter amount" step="0.01">
+                <small style="color:#9ca3af; font-size:0.8rem; display:block; margin-top:5px;">
+                    Positive for additions, negative for deductions
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label>Description (Optional)</label>
+                <textarea id="adjustment-description" placeholder="Add notes..." style="min-height:60px;"></textarea>
+            </div>
+
+            <input type="hidden" id="edit-adjustment-index" value="-1">
+
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeAddAdjustmentModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveAdjustment()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // --- Data Definitions ---
+        /* --- Data Definitions --- */
         const CONFIGS = {
             "Sim 4": ["CAE_IAE", "CAE_CFM", "AMU_IAE", "HKA_CFM", "HKE_IAE"],
-            "Sim 7": [
-                "CAE_IAE", "CAE_CFM", "CAE_NEO_LEAP", "CAE_NEO_PW", "HKA_CFM",
-                "HKE_IAE_TCAS_ON_RNP (HKE Default)", "HKE_IAE_TCAS_ON_FLS", 
-                "HKE_IAE_TCAS_OFF_RNP", "HKE_IAE_TCAS_OFF_FLS", "HKE_NEO_PW"
-            ],
-            "A330": [
-                "HKA_RR_BUSS_ON_AP/FD_TCAS_OFF (HKA Default)", "HKA_RR_BUSS_ON_AP/FD_TCAS_ON",
-                "HKA_RR_BUSS_OFF_AP/FD_TCAS_OFF", "HKA_RR_BUSS_OFF_AP/FD_TCAS_ON",
-                "HKC_RR", "AHK_RR"
-            ],
+            "Sim 7": ["CAE_IAE", "CAE_CFM", "CAE_NEO_LEAP", "CAE_NEO_PW", "HKA_CFM", "HKE_IAE_TCAS_ON_RNP (HKE Default)", "HKE_IAE_TCAS_ON_FLS", "HKE_IAE_TCAS_OFF_RNP", "HKE_IAE_TCAS_OFF_FLS", "HKE_NEO_PW"],
+            "A330": ["HKA_RR_BUSS_ON_AP/FD_TCAS_OFF (HKA Default)", "HKA_RR_BUSS_ON_AP/FD_TCAS_ON", "HKA_RR_BUSS_OFF_AP/FD_TCAS_OFF", "HKA_RR_BUSS_OFF_AP/FD_TCAS_ON", "HKC_RR", "AHK_RR"],
             "HKA IPT": ["HKA_CFM", "HKA_NEO_PW"],
             "HKA FTD": ["HKA_RR"],
             "CAE IPT": ["IAE_Metric", "IAE_Imperial", "CFM_Metric", "CFM_Imperial"]
         };
-
         const PFC_OPTIONS = ["Sim 4", "Sim 7", "A330", "HKA IPT", "HKA FTD", "CAE IPT"];
         const SESSION_CHANGE_OPTIONS = ["Sim 4", "Sim 7", "A330", "HKA IPT", "HKA FTD", "CAE IPT"];
 
         let currentActivities = [];
-        let recordToDeleteId = null; 
-        let currentPageId = 'welcome-page'; 
-        
+        let recordToDeleteId = null;
+        let currentPageId = 'welcome-page';
         let isEditingMode = false;
-        
-        // Settings State (Default True)
         let autoExportEnabled = true;
+        let currentMonthKey = '';
 
         const CURRENT_SHIFT_KEY = 'cae_current_shift';
         const CURRENT_ACTIVITIES_KEY = 'cae_current_acts_obj';
         const SETTINGS_KEY = 'cae_settings';
+        const SALARY_CONFIG_KEY = 'cae_salary_config';
+        const SALARY_HISTORY_KEY = 'cae_salary_history';
+        const LAST_CHECK_KEY = 'cae_last_salary_check';
 
         document.addEventListener('DOMContentLoaded', () => {
-            loadSettings(); // NEW: Load user preferences
+            loadSettings();
+            loadSalaryVisibility();
+            loadSalarySort(); // Add this line
             updateContinueButton();
             updateMorningBriefingVisibility();
-            
+            checkFirstTimeSetup();
+            checkMonthlySalary();
+            updateSalaryDisplay();
+            updateSalaryConfigDisplay();
+
             history.replaceState({page: 'welcome-page'}, '', '');
-            
             window.onpopstate = function(event) {
-                if(event.state && event.state.page) {
-                    showPage(event.state.page, false);
-                } else {
-                    showPage('welcome-page', false);
-                }
+                if(event.state && event.state.page) showPage(event.state.page, false);
+                else showPage('welcome-page', false);
             };
         });
 
-        // --- SETTINGS LOGIC (NEW) ---
+        /* --- SETTINGS LOGIC --- */
         function loadSettings() {
             const savedSettings = localStorage.getItem(SETTINGS_KEY);
             if(savedSettings) {
                 const settings = JSON.parse(savedSettings);
                 autoExportEnabled = settings.autoExport;
             }
-            // Update UI
             document.getElementById('setting-auto-export').checked = autoExportEnabled;
         }
 
@@ -878,7 +1477,549 @@
             localStorage.setItem(SETTINGS_KEY, JSON.stringify({ autoExport: autoExportEnabled }));
         }
 
-        // --- NAVIGATION LOGIC ---
+        /* --- SALARY CONFIGURATION --- */
+        function checkFirstTimeSetup() {
+            const config = localStorage.getItem(SALARY_CONFIG_KEY);
+            if (!config) {
+                setTimeout(() => {
+                    showSalarySetup();
+                }, 1000);
+            }
+        }
+
+        function showSalarySetup() {
+            const config = getSalaryConfig();
+            if (config) {
+                const radio = document.querySelector(`input[name="payment-type"][value="${config.type}"]`);
+                if (radio) radio.checked = true;
+                if (config.type === 'hourly') {
+                    document.getElementById('hourly-rate').value = config.hourlyRate || '';
+                    document.getElementById('night-allowance').value = config.nightAllowance || '';
+                }
+                toggleSalaryFields();
+            }
+            document.getElementById('salary-setup-modal').style.display = 'flex';
+        }
+
+        function closeSalarySetup() {
+            document.getElementById('salary-setup-modal').style.display = 'none';
+        }
+
+        function toggleSalaryFields() {
+            const selected = document.querySelector('input[name="payment-type"]:checked');
+            const hourlyFields = document.getElementById('hourly-fields');
+            if (selected && selected.value === 'hourly') {
+                hourlyFields.style.display = 'block';
+            } else {
+                hourlyFields.style.display = 'none';
+            }
+        }
+
+        function saveSalaryConfig() {
+            const selected = document.querySelector('input[name="payment-type"]:checked');
+            if (!selected) {
+                showAlert('Please select a payment type.');
+                return;
+            }
+
+            const config = {
+                type: selected.value
+            };
+
+            if (selected.value === 'hourly') {
+                const rate = parseFloat(document.getElementById('hourly-rate').value);
+                const allowance = parseFloat(document.getElementById('night-allowance').value);
+
+                if (!rate || rate <= 0) {
+                    showAlert('Please enter a valid hourly rate.');
+                    return;
+                }
+
+                config.hourlyRate = rate;
+                config.nightAllowance = allowance || 0;
+            }
+
+            localStorage.setItem(SALARY_CONFIG_KEY, JSON.stringify(config));
+            closeSalarySetup();
+            
+            if (config.type === 'hourly') {
+                calculateAllHistoricalSalary();
+            }
+            
+            updateSalaryDisplay();
+            updateSalaryConfigDisplay();
+            showAlert('Salary configuration saved and history calculated!', 'Success');
+        }
+
+        function getSalaryConfig() {
+            const raw = localStorage.getItem(SALARY_CONFIG_KEY);
+            return raw ? JSON.parse(raw) : null;
+        }
+
+        function updateSalaryConfigDisplay() {
+            const config = getSalaryConfig();
+            const display = document.getElementById('salary-config-display');
+            
+            if (!config) {
+                display.innerText = 'Not configured';
+            } else if (config.type === 'monthly') {
+                display.innerText = 'Payment: Monthly (fixed)';
+            } else {
+                display.innerText = `Hourly: HKD$ ${config.hourlyRate}/hr | Night: +HKD$ ${config.nightAllowance}`;
+            }
+        }
+
+        function getShiftHours(typeString) {
+            if (!typeString) return 0;
+            if (typeString.includes('Regular')) return 9;
+            if (typeString.includes('Day') || typeString.includes('Night')) return 12;
+            return 0;
+        }
+
+        function calculateSalary(records, startDate, endDate) {
+            const config = getSalaryConfig();
+            if (!config || config.type !== 'hourly') return null;
+
+            let totalHours = 0;
+            let totalSalary = 0;
+            let shiftCounts = { Regular: 0, Day: 0, Night: 0 };
+
+            records.forEach(r => {
+                const rDate = new Date(r.date);
+                if (rDate >= startDate && rDate <= endDate) {
+                    const hours = getShiftHours(r.type);
+                    totalHours += hours;
+
+                    let shiftSalary = hours * config.hourlyRate;
+                    
+                    if (r.type.includes('Night')) {
+                        shiftSalary += config.nightAllowance;
+                        shiftCounts.Night++;
+                    } else if (r.type.includes('Day')) {
+                        shiftCounts.Day++;
+                    } else {
+                        shiftCounts.Regular++;
+                    }
+
+                    totalSalary += shiftSalary;
+                }
+            });
+
+            return {
+                totalHours,
+                totalSalary,
+                shiftCounts
+            };
+        }
+
+        function updateSalaryDisplay() {
+            const config = getSalaryConfig();
+            const widget = document.getElementById('salary-summary-widget');
+
+            if (!config || config.type !== 'hourly') {
+                widget.style.display = 'none';
+                return;
+            }
+
+            const now = new Date();
+            const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            const monthData = getMonthData(monthKey);
+            
+            if (monthData) {
+                widget.style.display = 'block';
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                                'July', 'August', 'September', 'October', 'November', 'December'];
+                
+                document.getElementById('current-month-label').innerText = 
+                    `Current Month (${monthNames[now.getMonth()]} ${now.getFullYear()})`;
+                
+                // Use maskAmount function to respect visibility setting
+                document.getElementById('current-salary-amount').innerText = 
+                    maskAmount(monthData.totalSalary);
+                
+                document.getElementById('salary-details-text').innerText = 
+                    `${monthData.totalHours} hours worked`;
+            } else {
+                widget.style.display = 'none';
+            }
+        }
+
+        function calculateAllHistoricalSalary() {
+            const config = getSalaryConfig();
+            if (!config || config.type !== 'hourly') return;
+
+            const records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
+            if (records.length === 0) return;
+
+            const monthMap = {};
+            records.forEach(r => {
+                const date = new Date(r.date);
+                const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                if (!monthMap[monthKey]) {
+                    monthMap[monthKey] = [];
+                }
+                monthMap[monthKey].push(r);
+            });
+
+            const history = JSON.parse(localStorage.getItem(SALARY_HISTORY_KEY) || '[]');
+            const existingAdjustments = {};
+            history.forEach(h => {
+                if (h.adjustments) {
+                    existingAdjustments[h.month] = h.adjustments;
+                }
+            });
+
+            const newHistory = [];
+            Object.keys(monthMap).sort().forEach(monthKey => {
+                const [year, month] = monthKey.split('-');
+                const startOfMonth = new Date(parseInt(year), parseInt(month) - 1, 1);
+                const endOfMonth = new Date(parseInt(year), parseInt(month), 0, 23, 59, 59);
+
+                const monthRecords = monthMap[monthKey];
+                const stats = calculateSalary(monthRecords, startOfMonth, endOfMonth);
+                
+                if (stats && stats.totalHours > 0) {
+                    const adjustments = existingAdjustments[monthKey] || [];
+                    const adjustmentTotal = adjustments.reduce((sum, adj) => sum + adj.amount, 0);
+                    
+                    newHistory.push({
+                        month: monthKey,
+                        ...stats,
+                        adjustments: adjustments,
+                        totalSalary: stats.totalSalary + adjustmentTotal
+                    });
+                }
+            });
+
+            localStorage.setItem(SALARY_HISTORY_KEY, JSON.stringify(newHistory));
+        }
+
+        function recalculateAllHistory() {
+            const config = getSalaryConfig();
+            if (!config || config.type !== 'hourly') {
+                showAlert('Please configure hourly salary first.');
+                return;
+            }
+
+            calculateAllHistoricalSalary();
+            updateSalaryDisplay();
+            showAlert('Salary history recalculated for all past records!', 'Success');
+        }
+
+        function checkMonthlySalary() {
+            const config = getSalaryConfig();
+            if (!config || config.type !== 'hourly') return;
+
+            const now = new Date();
+            const lastCheck = localStorage.getItem(LAST_CHECK_KEY);
+            const lastCheckDate = lastCheck ? new Date(lastCheck) : null;
+
+            if (!lastCheckDate || 
+                (now.getMonth() !== lastCheckDate.getMonth() || 
+                 now.getFullYear() !== lastCheckDate.getFullYear())) {
+                
+                const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+                
+                const records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
+                const stats = calculateSalary(records, lastMonth, lastMonthEnd);
+
+                if (stats && stats.totalHours > 0) {
+                    saveMonthlySalaryHistory(lastMonth, stats);
+                    showMonthlySummaryModal(lastMonth, stats);
+                }
+
+                localStorage.setItem(LAST_CHECK_KEY, now.toISOString());
+            }
+        }
+
+        function saveMonthlySalaryHistory(month, stats) {
+            const history = JSON.parse(localStorage.getItem(SALARY_HISTORY_KEY) || '[]');
+            const monthKey = `${month.getFullYear()}-${String(month.getMonth() + 1).padStart(2, '0')}`;
+            
+            const existing = history.findIndex(h => h.month === monthKey);
+            if (existing !== -1) {
+                history[existing] = { 
+                    month: monthKey, 
+                    ...stats,
+                    adjustments: history[existing].adjustments || []
+                };
+            } else {
+                history.push({ 
+                    month: monthKey, 
+                    ...stats,
+                    adjustments: []
+                });
+            }
+            
+            history.sort((a, b) => b.month.localeCompare(a.month));
+            localStorage.setItem(SALARY_HISTORY_KEY, JSON.stringify(history));
+        }
+
+        function showMonthlySummaryModal(month, stats) {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('summary-month-title').innerText = 
+                `${monthNames[month.getMonth()]} ${month.getFullYear()} Summary`;
+            
+            document.getElementById('summary-hours-text').innerText = 
+                `Total Hours: ${stats.totalHours} hrs`;
+            
+            const shiftsText = `Regular: ${stats.shiftCounts.Regular} shifts | Day: ${stats.shiftCounts.Day} shifts | Night: ${stats.shiftCounts.Night} shifts`;
+            document.getElementById('summary-shifts-text').innerText = shiftsText;
+            
+            document.getElementById('summary-salary-amount').innerText = 
+                `HKD$ ${stats.totalSalary.toFixed(2)}`;
+            
+            document.getElementById('monthly-summary-modal').style.display = 'flex';
+        }
+
+        function closeMonthlySummary() {
+            document.getElementById('monthly-summary-modal').style.display = 'none';
+        }
+
+        function viewSalaryDashboard() {
+            closeMonthlySummary();
+            showPage('salary-page');
+        }
+
+        function renderSalaryDashboard() {
+            const config = getSalaryConfig();
+            
+            if (!config || config.type !== 'hourly') {
+                document.getElementById('salary-not-configured').style.display = 'block';
+                document.getElementById('salary-dashboard-content').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('salary-not-configured').style.display = 'none';
+            document.getElementById('salary-dashboard-content').style.display = 'block';
+
+            // Calculate total earnings from all history
+            let history = JSON.parse(localStorage.getItem(SALARY_HISTORY_KEY) || '[]');
+            const totalEarnings = history.reduce((sum, month) => sum + month.totalSalary, 0);
+            const totalHours = history.reduce((sum, month) => sum + month.totalHours, 0);
+            
+            document.getElementById('total-earnings-amount').innerText = `HKD$ ${totalEarnings.toFixed(2)}`;
+            document.getElementById('total-earnings-details').innerText = `${totalHours} total hours | ${history.length} months`;
+
+            // Current month stats
+            const now = new Date();
+            const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+            const currentMonth = getMonthData(monthKey);
+            
+            if (currentMonth) {
+                document.getElementById('stat-current-hours').innerText = `${currentMonth.totalHours} hrs`;
+                document.getElementById('stat-current-salary').innerText = `HKD$ ${currentMonth.totalSalary.toFixed(2)}`;
+            }
+
+            // Apply sorting
+            history = sortHistoryData([...history]);
+            
+            const tbody = document.getElementById('salary-history-body');
+            tbody.innerHTML = '';
+
+            if (history.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#9ca3af;">No history yet</td></tr>';
+            } else {
+                history.forEach(h => {
+                    const [year, month] = h.month.split('-');
+                    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    const monthName = monthNames[parseInt(month) - 1];
+                    
+                    const row = document.createElement('tr');
+                    row.onclick = () => showMonthDetail(h.month);
+                    row.innerHTML = `
+                        <td>${monthName} ${year}</td>
+                        <td>${h.totalHours} hrs</td>
+                        <td>HKD$ ${h.totalSalary.toFixed(2)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            
+            // Update sort icons
+            updateSortIcons();
+        }
+
+        /* --- MONTH DETAIL FUNCTIONS --- */
+        function getMonthData(monthKey) {
+            calculateAllHistoricalSalary();
+            const history = JSON.parse(localStorage.getItem(SALARY_HISTORY_KEY) || '[]');
+            return history.find(h => h.month === monthKey);
+        }
+
+        function showMonthDetail(monthKey) {
+            currentMonthKey = monthKey;
+            const monthData = getMonthData(monthKey);
+            
+            if (!monthData) {
+                showAlert('No data found for this month.');
+                return;
+            }
+
+            const [year, month] = monthKey.split('-');
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                              'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthName = monthNames[parseInt(month) - 1];
+            
+            document.getElementById('detail-month-title').innerText = `${monthName} ${year}`;
+
+            const shiftBreakdown = document.getElementById('shift-breakdown');
+            shiftBreakdown.innerHTML = `
+                <div class="detail-row">
+                    <span>Regular Shifts (9hrs)</span>
+                    <span>${monthData.shiftCounts.Regular} shifts</span>
+                </div>
+                <div class="detail-row">
+                    <span>Day Shifts (12hrs)</span>
+                    <span>${monthData.shiftCounts.Day} shifts</span>
+                </div>
+                <div class="detail-row">
+                    <span>Night Shifts (12hrs)</span>
+                    <span>${monthData.shiftCounts.Night} shifts</span>
+                </div>
+            `;
+
+            const config = getSalaryConfig();
+            const baseSalary = (monthData.totalHours * config.hourlyRate) + 
+                             (monthData.shiftCounts.Night * config.nightAllowance);
+
+            document.getElementById('detail-total-hours').innerText = `${monthData.totalHours} hrs`;
+            document.getElementById('detail-base-pay').innerText = `HKD$ ${baseSalary.toFixed(2)}`;
+
+            renderAdjustmentsList(monthData.adjustments || []);
+
+            const adjustmentTotal = (monthData.adjustments || []).reduce((sum, adj) => sum + adj.amount, 0);
+            const totalSalary = baseSalary + adjustmentTotal;
+            document.getElementById('detail-total-salary').innerText = `HKD$ ${totalSalary.toFixed(2)}`;
+
+            document.getElementById('month-detail-modal').style.display = 'flex';
+        }
+
+        function closeMonthDetail() {
+            document.getElementById('month-detail-modal').style.display = 'none';
+            renderSalaryDashboard();
+        }
+
+        function renderAdjustmentsList(adjustments) {
+            const list = document.getElementById('adjustments-list');
+            
+            if (!adjustments || adjustments.length === 0) {
+                list.innerHTML = '<p style="text-align:center; color:#9ca3af; font-size:0.9rem;">No adjustments</p>';
+                return;
+            }
+
+            list.innerHTML = adjustments.map((adj, index) => {
+                const isPositive = adj.amount >= 0;
+                const sign = isPositive ? '+' : '';
+                return `
+                    <div class="adjustment-item ${isPositive ? 'positive' : 'negative'}">
+                        <div class="adjustment-info">
+                            <div class="adjustment-type">${adj.type}</div>
+                            ${adj.description ? `<div class="adjustment-desc">${adj.description}</div>` : ''}
+                        </div>
+                        <div class="adjustment-amount ${isPositive ? 'positive' : 'negative'}">${sign}HKD$ ${Math.abs(adj.amount).toFixed(2)}</div>
+                        <button class="btn btn-secondary btn-sm" onclick="editAdjustment(${index})" style="margin:0 5px; padding:5px 10px;">✎</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteAdjustment(${index})" style="margin:0; padding:5px 10px;">×</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showAddAdjustmentModal() {
+            document.getElementById('adjustment-modal-title').innerText = 'Add Adjustment';
+            document.getElementById('adjustment-type').value = 'Overtime';
+            document.getElementById('adjustment-amount').value = '';
+            document.getElementById('adjustment-description').value = '';
+            document.getElementById('edit-adjustment-index').value = '-1';
+            document.getElementById('add-adjustment-modal').style.display = 'flex';
+        }
+
+        function closeAddAdjustmentModal() {
+            document.getElementById('add-adjustment-modal').style.display = 'none';
+        }
+
+        function saveAdjustment() {
+            const type = document.getElementById('adjustment-type').value;
+            const amount = parseFloat(document.getElementById('adjustment-amount').value);
+            const description = document.getElementById('adjustment-description').value;
+            const editIndex = parseInt(document.getElementById('edit-adjustment-index').value);
+
+            if (isNaN(amount)) {
+                showAlert('Please enter a valid amount.');
+                return;
+            }
+
+            const adjustment = { type, amount, description };
+
+            const history = JSON.parse(localStorage.getItem(SALARY_HISTORY_KEY) || '[]');
+            const monthIndex = history.findIndex(h => h.month === currentMonthKey);
+
+            if (monthIndex === -1) {
+                showAlert('Month data not found.');
+                return;
+            }
+
+            if (!history[monthIndex].adjustments) {
+                history[monthIndex].adjustments = [];
+            }
+
+            if (editIndex === -1) {
+                history[monthIndex].adjustments.push(adjustment);
+            } else {
+                history[monthIndex].adjustments[editIndex] = adjustment;
+            }
+
+            const config = getSalaryConfig();
+            const baseSalary = (history[monthIndex].totalHours * config.hourlyRate) + 
+                             (history[monthIndex].shiftCounts.Night * config.nightAllowance);
+            const adjustmentTotal = history[monthIndex].adjustments.reduce((sum, adj) => sum + adj.amount, 0);
+            history[monthIndex].totalSalary = baseSalary + adjustmentTotal;
+
+            localStorage.setItem(SALARY_HISTORY_KEY, JSON.stringify(history));
+
+            closeAddAdjustmentModal();
+            showMonthDetail(currentMonthKey);
+            updateSalaryDisplay();
+        }
+
+        function editAdjustment(index) {
+            const monthData = getMonthData(currentMonthKey);
+            const adjustment = monthData.adjustments[index];
+
+            document.getElementById('adjustment-modal-title').innerText = 'Edit Adjustment';
+            document.getElementById('adjustment-type').value = adjustment.type;
+            document.getElementById('adjustment-amount').value = adjustment.amount;
+            document.getElementById('adjustment-description').value = adjustment.description || '';
+            document.getElementById('edit-adjustment-index').value = index;
+            document.getElementById('add-adjustment-modal').style.display = 'flex';
+        }
+
+        function deleteAdjustment(index) {
+            if (!confirm('Delete this adjustment?')) return;
+
+            const history = JSON.parse(localStorage.getItem(SALARY_HISTORY_KEY) || '[]');
+            const monthIndex = history.findIndex(h => h.month === currentMonthKey);
+
+            if (monthIndex !== -1) {
+                history[monthIndex].adjustments.splice(index, 1);
+
+                const config = getSalaryConfig();
+                const baseSalary = (history[monthIndex].totalHours * config.hourlyRate) + 
+                                 (history[monthIndex].shiftCounts.Night * config.nightAllowance);
+                const adjustmentTotal = history[monthIndex].adjustments.reduce((sum, adj) => sum + adj.amount, 0);
+                history[monthIndex].totalSalary = baseSalary + adjustmentTotal;
+
+                localStorage.setItem(SALARY_HISTORY_KEY, JSON.stringify(history));
+                showMonthDetail(currentMonthKey);
+                updateSalaryDisplay();
+            }
+        }
+
+        /* --- NAVIGATION LOGIC --- */
         function showPage(pageId, addHistory = true) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -889,12 +2030,18 @@
                 renderRecords();
             }
 
-            if (addHistory) {
-                history.pushState({page: pageId}, '', '');
+            if(pageId === 'salary-page') {
+                renderSalaryDashboard();
             }
+
+            if(pageId === 'welcome-page') {
+                updateSalaryDisplay();
+            }
+
+            if (addHistory) history.pushState({page: pageId}, '', '');
         }
 
-        // --- Custom Alert Logic ---
+        /* --- Custom Alert Logic --- */
         function showAlert(msg, title = "Notice") {
             document.getElementById('alert-title').innerText = title;
             document.getElementById('alert-msg').innerText = msg;
@@ -905,7 +2052,7 @@
             document.getElementById('alert-modal').style.display = 'none';
         }
 
-        // --- Select & Form Logic ---
+        /* --- Select Form Logic --- */
         function selectShiftCard(element, value) {
             document.getElementById('shift-type').value = value;
             document.querySelectorAll('.shift-card').forEach(c => c.classList.remove('selected'));
@@ -917,7 +2064,7 @@
             const shiftType = document.getElementById('shift-type').value;
             const typeSelect = document.getElementById('act-type');
             const briefingOption = typeSelect.querySelector('option[value="Morning Briefing"]');
-            
+
             if (shiftType.includes("Regular") || shiftType.includes("Day")) {
                 if(briefingOption) briefingOption.disabled = false;
             } else {
@@ -931,13 +2078,13 @@
             document.querySelectorAll('.dynamic-field').forEach(el => {
                 if(el.id !== 'field-desc') el.style.display = 'none';
             });
-            
+
             if (type === "Session Change") {
                 setupSimulatorDropdown(SESSION_CHANGE_OPTIONS);
                 document.getElementById('field-simulator').style.display = 'block';
                 document.getElementById('field-config-from').style.display = 'block';
                 document.getElementById('field-config-to').style.display = 'block';
-            } 
+            }
             else if (type === "Preflight Checks") {
                 setupSimulatorDropdown(PFC_OPTIONS);
                 document.getElementById('field-simulator').style.display = 'block';
@@ -967,6 +2114,7 @@
         function updateConfigs() {
             const sim = document.getElementById('act-sim').value;
             const type = document.getElementById('act-type').value;
+
             const refreshSelect = (id, opts) => {
                 const el = document.getElementById(id);
                 const oldVal = el.value;
@@ -994,12 +2142,11 @@
             }
         }
 
-        // --- PHOTO HANDLING ---
+        /* --- PHOTO HANDLING --- */
         function handlePhotoUpload(input) {
             const file = input.files[0];
             if (!file) return;
 
-            // Compress image using Canvas
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
@@ -1007,21 +2154,19 @@
                     const canvas = document.createElement('canvas');
                     let width = img.width;
                     let height = img.height;
-                    const maxWidth = 800; // Constrain width
+                    const maxWidth = 800;
 
                     if (width > maxWidth) {
                         height = (height * maxWidth) / width;
                         width = maxWidth;
                     }
-
                     canvas.width = width;
                     canvas.height = height;
+
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Compress to JPEG 0.7 quality
                     const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-                    
                     document.getElementById('act-photo-data').value = dataUrl;
                     document.getElementById('photo-preview-img').src = dataUrl;
                     document.getElementById('photo-preview-box').style.display = 'block';
@@ -1045,8 +2190,10 @@
 
         function getFormData() {
             const type = document.getElementById('act-type').value;
-            if(!type) { showAlert("Please select an activity type."); return null; }
-
+            if(!type) {
+                showAlert("Please select an activity type.");
+                return null;
+            }
             const data = {
                 type: type,
                 sim: document.getElementById('act-sim').value,
@@ -1060,29 +2207,38 @@
             };
 
             if (type === "Session Change") {
-                if (!data.sim || !data.from || !data.to) { showAlert("Please complete session details."); return null; }
-            } else if (type === "Preflight Checks") {
-                if (!data.sim || !data.config) { showAlert("Select device and config."); return null; }
-            } else if (type === "Walk-Around Check") {
-                if (!data.floor) { showAlert("Select floor."); return null; }
-            } 
+                if (!data.sim || !data.from || !data.to) {
+                    showAlert("Please complete session details.");
+                    return null;
+                }
+            }
+            else if (type === "Preflight Checks") {
+                if (!data.sim || !data.config) {
+                    showAlert("Select device and config.");
+                    return null;
+                }
+            }
+            else if (type === "Walk-Around Check") {
+                if (!data.floor) {
+                    showAlert("Select floor.");
+                    return null;
+                }
+            }
             else if (type === "Preventive Maintenance") {
-                if (!data.pm_item) { showAlert("Select PM Item."); return null; }
+                if (!data.pm_item) {
+                    showAlert("Select PM Item.");
+                    return null;
+                }
             }
             return data;
         }
 
         function formatActivityString(data) {
             let s = `• ${data.type}`;
-            if (data.type === "Session Change") {
-                s += `: ${data.sim} (${data.from} ➝ ${data.to})`;
-            } else if (data.type === "Preflight Checks") {
-                s += `: ${data.sim} (${data.config})`;
-            } else if (data.type === "Walk-Around Check") {
-                s += `: ${data.floor}`;
-            } else if (data.type === "Preventive Maintenance") {
-                s += `: ${data.pm_item}`;
-            }
+            if (data.type === "Session Change") s += `: ${data.sim} (${data.from} ➝ ${data.to})`;
+            else if (data.type === "Preflight Checks") s += `: ${data.sim} (${data.config})`;
+            else if (data.type === "Walk-Around Check") s += `: ${data.floor}`;
+            else if (data.type === "Preventive Maintenance") s += `: ${data.pm_item}`;
             if (data.desc) s += `\n  - Note: ${data.desc}`;
             return s;
         }
@@ -1106,6 +2262,7 @@
         function editActivity(index) {
             const data = currentActivities[index];
             if(!data) return;
+
             document.getElementById('act-type').value = data.type;
             updateFormFields();
             document.getElementById('act-floor').value = data.floor || "";
@@ -1120,7 +2277,6 @@
                 if(data.config) document.getElementById('act-config-single').value = data.config;
             }
 
-            // Load photo
             if (data.photo) {
                 document.getElementById('act-photo-data').value = data.photo;
                 document.getElementById('photo-preview-img').src = data.photo;
@@ -1138,7 +2294,9 @@
             document.querySelector('.activity-builder').scrollIntoView({behavior: 'smooth'});
         }
 
-        function cancelEditActivity() { resetForm(); }
+        function cancelEditActivity() {
+            resetForm();
+        }
 
         function resetForm() {
             document.getElementById('act-type').value = "";
@@ -1149,11 +2307,10 @@
             document.getElementById('act-floor').value = "";
             document.getElementById('act-pm-item').value = "";
             document.getElementById('act-desc').value = "";
-            
             removePhoto();
-
             updateFormFields();
             document.getElementById('edit-activity-index').value = -1;
+
             const btn = document.getElementById('add-btn');
             btn.innerText = "+ Add Entry";
             btn.classList.remove('btn-update');
@@ -1168,49 +2325,35 @@
                 const text = formatActivityString(act);
                 const div = document.createElement('div');
                 div.className = 'activity-item';
-                
                 let imgHtml = '';
-                if(act.photo) {
-                    imgHtml = `<img src="${act.photo}" class="activity-thumb" onclick="showImgModal('${act.photo}')">`;
-                }
-
-                div.innerHTML = `
-                    ${imgHtml}
-                    <div class="activity-text">${text}</div>
-                    <div class="activity-controls">
-                        <button onclick="editActivity(${index})">✎</button>
-                        <button class="delete-btn" onclick="removeActivity(${index})">×</button>
-                    </div>
-                `;
+                if(act.photo) imgHtml = `<img src="${act.photo}" class="activity-thumb" onclick="showImgModal('${act.photo}')">`;
+                div.innerHTML = `${imgHtml}<div class="activity-text">${text}</div><div class="activity-controls"><button onclick="editActivity(${index})">✎</button><button class="delete-btn" onclick="removeActivity(${index})">×</button></div>`;
                 list.appendChild(div);
             });
+
             const fullLogString = currentActivities.map(formatActivityString).join('\n\n');
             document.getElementById('shift-log-hidden').value = fullLogString;
         }
 
         function removeActivity(index) {
-            if (parseInt(document.getElementById('edit-activity-index').value) === index) {
-                cancelEditActivity();
-            }
+            if (parseInt(document.getElementById('edit-activity-index').value) === index) cancelEditActivity();
             currentActivities.splice(index, 1);
             renderActivityList();
         }
 
-        // --- Shift Logic ---
+        /* --- Shift Logic --- */
         function onStartShift() {
             const current = getCurrentShift();
             if(!current) {
                 startShift();
                 return;
             }
+
             const savedActs = localStorage.getItem(CURRENT_ACTIVITIES_KEY);
             const acts = savedActs ? JSON.parse(savedActs) : [];
 
-            if (acts.length === 0) {
-                document.getElementById('empty-draft-modal').style.display = 'flex';
-            } else {
-                document.getElementById('start-modal').style.display = 'flex';
-            }
+            if (acts.length === 0) document.getElementById('empty-draft-modal').style.display = 'flex';
+            else document.getElementById('start-modal').style.display = 'flex';
         }
 
         function startShift() {
@@ -1218,20 +2361,21 @@
             document.getElementById('edit-id').value = Date.now();
             currentActivities = [];
             renderActivityList();
-            
+
             const defaultType = 'Regular 0830-1730';
             document.getElementById('shift-type').value = defaultType;
             document.querySelectorAll('.shift-card').forEach(c => c.classList.remove('selected'));
             document.querySelector('.shift-card[data-value="Regular 0830-1730"]').classList.add('selected');
             document.getElementById('shift-date').value = new Date().toISOString().split('T')[0];
-            localStorage.removeItem(CURRENT_ACTIVITIES_KEY);
 
+            localStorage.removeItem(CURRENT_ACTIVITIES_KEY);
             setCurrentShift({
                 id: Number(document.getElementById('edit-id').value),
                 date: document.getElementById('shift-date').value,
                 type: defaultType,
                 log: ''
             });
+
             showPage('shift-page');
             updateMorningBriefingVisibility();
         }
@@ -1240,22 +2384,21 @@
             isEditingMode = false;
             const current = getCurrentShift();
             if(!current) return;
+
             document.getElementById('edit-id').value = current.id;
             document.getElementById('shift-date').value = current.date;
             document.getElementById('shift-type').value = current.type;
+
             const savedActs = localStorage.getItem(CURRENT_ACTIVITIES_KEY);
-            if (savedActs) {
-                currentActivities = JSON.parse(savedActs);
-            } else if (current.log) {
-                currentActivities = current.log.split('\n\n').filter(x => x.trim()).map(txt => ({
-                    type: "Legacy Entry", desc: txt 
-                }));
-            } else {
-                currentActivities = [];
-            }
+            if (savedActs) currentActivities = JSON.parse(savedActs);
+            else if (current.log) currentActivities = current.log.split('\n\n').filter(x => x.trim()).map(txt => ({ type: "Legacy Entry", desc: txt }));
+            else currentActivities = [];
+
             renderActivityList();
+
             const card = document.querySelector(`.shift-card[data-value="${current.type}"]`);
             if(card) selectShiftCard(card, current.type);
+
             showPage('shift-page');
         }
 
@@ -1278,51 +2421,57 @@
                 type: document.getElementById('shift-type').value,
                 log: document.getElementById('shift-log-hidden').value
             };
+
             localStorage.setItem(CURRENT_ACTIVITIES_KEY, JSON.stringify(currentActivities));
             setCurrentShift(draft);
-            history.back(); // Return to previous page
+            history.back();
         }
 
         function validateShift() {
             const date = document.getElementById('shift-date').value;
-            if(!date) { 
-                showAlert("Date required"); 
-                return false; 
+            if(!date) {
+                showAlert("Date required");
+                return false;
             }
-            if(currentActivities.length === 0) { 
-                showAlert("Please add at least one activity."); 
-                return false; 
+            if(currentActivities.length === 0) {
+                showAlert("Please add at least one activity.");
+                return false;
             }
             return true;
         }
 
         function confirmEndShift() {
             if(validateShift()) {
-                document.getElementById('confirm-modal').style.display = 'flex'; 
+                document.getElementById('confirm-modal').style.display = 'flex';
             }
         }
-        
-        function closeModal() { document.getElementById('confirm-modal').style.display = 'none'; }
-        function closeStartModal() { document.getElementById('start-modal').style.display = 'none'; }
 
-        // --- MODIFIED SAVE LOGIC ---
+        function closeModal() {
+            document.getElementById('confirm-modal').style.display = 'none';
+        }
+
+        function closeStartModal() {
+            document.getElementById('start-modal').style.display = 'none';
+        }
+
         function saveShift() {
             const date = document.getElementById('shift-date').value;
             const log = document.getElementById('shift-log-hidden').value;
-
             let records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
             const id = Number(document.getElementById('edit-id').value);
+
             const entry = {
                 id: id,
                 date: date,
                 type: document.getElementById('shift-type').value,
                 log: log,
-                activities: currentActivities 
+                activities: currentActivities
             };
-            const idx = records.findIndex(r => r.id == id);
+
+            const idx = records.findIndex(r => r.id === id);
             if(idx !== -1) records[idx] = entry;
             else records.unshift(entry);
-            
+
             try {
                 localStorage.setItem('cae_logs', JSON.stringify(records));
             } catch (e) {
@@ -1333,14 +2482,15 @@
             setCurrentShift(null);
             localStorage.removeItem(CURRENT_ACTIVITIES_KEY);
             closeModal();
-            
-            // Check Auto-Export Setting
+
+            calculateAllHistoricalSalary();
+            updateSalaryDisplay();
+
             if(autoExportEnabled) {
                 exportData();
-                showAlert("Shift record saved and exported!\n This can be turned off in settings.", "Success");
+                showAlert("Shift record saved and exported! This can be turned off in settings.", "Success");
             }
-            
-            // Navigation
+
             if (isEditingMode) {
                 history.back();
             } else {
@@ -1353,16 +2503,20 @@
             const current = getCurrentShift();
             if(current) {
                 let records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
-                const idx = records.findIndex(r => r.id == current.id);
-                const richActs = JSON.parse(localStorage.getItem(CURRENT_ACTIVITIES_KEY) || "[]");
+                const idx = records.findIndex(r => r.id === current.id);
+
+                const richActs = JSON.parse(localStorage.getItem(CURRENT_ACTIVITIES_KEY) || '[]');
                 if(richActs.length > 0) {
-                     current.log = richActs.map(formatActivityString).join('\n\n');
-                     current.activities = richActs;
+                    current.log = richActs.map(formatActivityString).join('\n\n');
+                    current.activities = richActs;
                 }
+
                 if(idx !== -1) records[idx] = current;
                 else records.unshift(current);
+
                 localStorage.setItem('cae_logs', JSON.stringify(records));
             }
+
             setCurrentShift(null);
             localStorage.removeItem(CURRENT_ACTIVITIES_KEY);
             closeStartModal();
@@ -1373,23 +2527,82 @@
             const raw = localStorage.getItem(CURRENT_SHIFT_KEY);
             return raw ? JSON.parse(raw) : null;
         }
+
         function setCurrentShift(s) {
             if(s) localStorage.setItem(CURRENT_SHIFT_KEY, JSON.stringify(s));
             else localStorage.removeItem(CURRENT_SHIFT_KEY);
             updateContinueButton();
         }
+
         function updateContinueButton() {
             const btn = document.getElementById('continue-btn');
             const cur = getCurrentShift();
             if(btn) btn.style.display = cur ? 'block' : 'none';
         }
 
-        // --- Records Logic ---
+        /* --- SHIFT NUMBERING HELPERS --- */
+        function getShiftCategory(typeStr) {
+            if (!typeStr) return 'Regular';
+            const t = String(typeStr).toLowerCase();
+            if (t.includes('day')) return 'Day';
+            if (t.includes('night')) return 'Night';
+            if (t.includes('regular')) return 'Regular';
+            return String(typeStr).split(' ')[0] || 'Regular';
+        }
+
+        function ordinal(n) {
+            const v = n % 100;
+            if (v >= 11 && v <= 13) return `${n}th`;
+            switch (n % 10) {
+                case 1: return `${n}st`;
+                case 2: return `${n}nd`;
+                case 3: return `${n}rd`;
+                default: return `${n}th`;
+            }
+        }
+
+        function buildShiftNumberMap(records) {
+            const sorted = [...records].sort((a, b) => {
+                const da = (a.date || '');
+                const db = (b.date || '');
+                if (da !== db) return da.localeCompare(db);
+                return (a.id || 0) - (b.id || 0);
+            });
+
+            const perType = {};
+            const map = {};
+
+            sorted.forEach((r, idx) => {
+                const type = getShiftCategory(r.type);
+                perType[type] = (perType[type] || 0) + 1;
+
+                map[r.id] = {
+                    overall: idx + 1,
+                    type,
+                    typeIndex: perType[type]
+                };
+            });
+
+            return map;
+        }
+
+        function formatShiftIndicatorText(info) {
+            if (!info) return '';
+            if (info.type === 'Day') {
+                return `${ordinal(info.overall)} Shift`;
+            }
+            if (info.type === 'Night' || info.type === 'Regular') {
+                return `${ordinal(info.overall)} Shift (${ordinal(info.typeIndex)} ${info.type} Shift)`;
+            }
+            return `${ordinal(info.overall)} Shift`;
+        }
+
+        /* --- Records Logic --- */
         function populateYearFilter() {
             const records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
             const yearSelect = document.getElementById('filter-year');
-            const currentVal = yearSelect.value; 
-            
+            const currentVal = yearSelect.value;
+
             const years = new Set(records.map(r => r.date.substring(0, 4)));
             const sortedYears = Array.from(years).sort().reverse();
 
@@ -1400,13 +2613,14 @@
                 opt.innerText = y;
                 yearSelect.appendChild(opt);
             });
+
             yearSelect.value = currentVal;
         }
 
         function toggleSortOrder() {
             const hiddenInput = document.getElementById('sort-order-val');
             const iconSpan = document.getElementById('sort-icon');
-            
+
             if(hiddenInput.value === 'desc') {
                 hiddenInput.value = 'asc';
                 iconSpan.innerText = '↑';
@@ -1420,14 +2634,14 @@
         function renderRecords() {
             const list = document.getElementById('records-list');
             const records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
-            
             const searchVal = document.getElementById('search-input').value.toLowerCase();
             const yearVal = document.getElementById('filter-year').value;
             const monthVal = document.getElementById('filter-month').value;
             const sortOrder = document.getElementById('sort-order-val').value;
 
+            const numberMap = buildShiftNumberMap(records);
+
             list.innerHTML = '';
-            
             if(records.length === 0) {
                 list.innerHTML = '<p style="text-align:center;color:#888;">No records found.</p>';
                 return;
@@ -1457,47 +2671,33 @@
             filtered.forEach(r => {
                 const d = document.createElement('div');
                 d.className = 'record-card';
-                
-                // Build HTML from structured activities if available
+
                 let contentHtml = '';
                 if (r.activities && r.activities.length > 0) {
                     contentHtml = r.activities.map(act => {
                         let line = formatActivityString(act);
-                        // Bold title
                         line = line.replace(/^•\s*(.*?)(:|$)/m, '<span class="log-title">• $1</span>$2');
-                        // Image
                         let imgHtml = '';
-                        if(act.photo) {
-                            imgHtml = `<img src="${act.photo}" class="record-img" onclick="showImgModal('${act.photo}')">`;
-                        }
+                        if(act.photo) imgHtml = `<img src="${act.photo}" class="record-img" onclick="showImgModal('${act.photo}')">`;
                         return `<div>${line}${imgHtml}</div>`;
                     }).join('<br>');
                 } else {
-                    // Fallback for legacy string-only logs
                     let processedLog = r.log;
                     processedLog = processedLog.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
                     processedLog = processedLog.replace(/^•\s*(.*?)(:|$)/gm, '<span class="log-title">• $1</span>$2');
                     contentHtml = processedLog;
                 }
 
-                d.innerHTML = `
-                    <div class="record-header"><span>${r.date}</span><span>${r.type.split(' ')[0]}</span></div>
-                    <div style="font-size:0.8em;color:#aaa;margin-bottom:8px;">${r.type}</div>
-                    <div class="record-content">${contentHtml}</div>
-                    <div class="record-actions">
-                        <button class="btn btn-secondary btn-sm" onclick="editRecord(${r.id})">Edit</button>
-                        <button class="btn btn-secondary btn-sm" style="color:#ef4444;border-color:#ef4444;" onclick="openDeleteModal(${r.id})">Delete</button>
-                    </div>
-                `;
+                d.innerHTML = `<div class="record-header"><span>${r.date}</span><span>${formatShiftIndicatorText(numberMap[r.id])}</span></div><div style="font-size:0.8em;color:#aaa;margin-bottom:8px;">${r.type}</div><div class="record-content">${contentHtml}</div><div class="record-actions"><button class="btn btn-secondary btn-sm" onclick="editRecord(${r.id})">Edit</button><button class="btn btn-secondary btn-sm" style="color:#ef4444;border-color:#ef4444;" onclick="openDeleteModal(${r.id})">Delete</button></div>`;
                 list.appendChild(d);
             });
         }
-        
-        // Image Modal Logic
+
         function showImgModal(src) {
             document.getElementById('img-modal-target').src = src;
             document.getElementById('img-modal').style.display = 'flex';
         }
+
         function closeImgModal() {
             document.getElementById('img-modal').style.display = 'none';
         }
@@ -1519,28 +2719,31 @@
                 localStorage.setItem('cae_logs', JSON.stringify(records));
                 populateYearFilter();
                 renderRecords();
+                calculateAllHistoricalSalary();
+                updateSalaryDisplay();
                 closeDeleteModal();
             }
         }
 
         function editRecord(id) {
-            isEditingMode = true; 
+            isEditingMode = true;
             const records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
             const r = records.find(x => x.id == id);
+
             if(r) {
                 document.getElementById('edit-id').value = r.id;
                 document.getElementById('shift-date').value = r.date;
                 document.getElementById('shift-type').value = r.type;
-                if (r.activities) {
-                    currentActivities = r.activities;
-                } else if (r.log) {
-                    currentActivities = r.log.split('\n\n').filter(x=>x).map(txt => ({ type: "Legacy Entry", desc: txt }));
-                } else {
-                    currentActivities = [];
-                }
+
+                if (r.activities) currentActivities = r.activities;
+                else if (r.log) currentActivities = r.log.split('\n\n').filter(x=>x).map(txt => ({ type: "Legacy Entry", desc: txt }));
+                else currentActivities = [];
+
                 renderActivityList();
+
                 const card = document.querySelector(`.shift-card[data-value="${r.type}"]`);
                 if(card) selectShiftCard(card, r.type);
+
                 showPage('shift-page');
             }
         }
@@ -1551,6 +2754,7 @@
                 showAlert("No records to export.");
                 return;
             }
+
             const blob = new Blob([records], { type: "application/json" });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1563,28 +2767,36 @@
             URL.revokeObjectURL(url);
         }
 
-        function triggerImport() { document.getElementById('import-file').click(); }
+        function triggerImport() {
+            document.getElementById('import-file').click();
+        }
 
         function importData(input) {
             const file = input.files[0];
             if (!file) return;
+
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
                     if (!Array.isArray(importedData)) throw new Error("Invalid format");
+
                     let currentData = JSON.parse(localStorage.getItem('cae_logs') || '[]');
                     let addedCount = 0;
+
                     importedData.forEach(item => {
                         if (!currentData.some(existing => existing.id === item.id)) {
                             currentData.push(item);
                             addedCount++;
                         }
                     });
+
                     currentData.sort((a, b) => b.id - a.id);
                     localStorage.setItem('cae_logs', JSON.stringify(currentData));
                     populateYearFilter();
                     renderRecords();
+                    calculateAllHistoricalSalary();
+                    updateSalaryDisplay();
                     showAlert(`Successfully imported ${addedCount} new records.`);
                 } catch (err) {
                     showAlert("Failed to import. Invalid JSON file.");
@@ -1594,6 +2806,130 @@
             };
             reader.readAsText(file);
         }
+        /* --- SALARY VISIBILITY TOGGLE --- */
+        const SALARY_VISIBLE_KEY = 'cae_salary_visible';
+        let salaryVisible = true;
+
+        function loadSalaryVisibility() {
+            const saved = localStorage.getItem(SALARY_VISIBLE_KEY);
+            salaryVisible = saved !== null ? saved === 'true' : false;
+            updateSalaryVisibilityDisplay();
+        }
+
+        function toggleSalaryVisibility() {
+            salaryVisible = !salaryVisible;
+            localStorage.setItem(SALARY_VISIBLE_KEY, salaryVisible);
+            updateSalaryVisibilityDisplay();
+        }
+
+        function updateSalaryVisibilityDisplay() {
+            const btn = document.getElementById('salary-visibility-btn');
+            const amountEl = document.getElementById('current-salary-amount');
+            
+            if (!amountEl) return;
+            
+            if (salaryVisible) {
+                btn.innerText = '👁️';
+                // Show real amount - will be updated by updateSalaryDisplay()
+                updateSalaryDisplay();
+            } else {
+                btn.innerText = '🙈';
+                amountEl.innerText = 'HKD$ *****';
+            }
+        }
+
+        function maskAmount(amount) {
+            return salaryVisible ? `HKD$ ${amount.toFixed(2)}` : 'HKD$ *****';
+        }
+        /* --- SALARY TABLE SORTING --- */
+        const SALARY_SORT_KEY = 'cae_salary_sort';
+        let salarySortBy = 'month';
+        let salarySortOrder = 'desc';
+
+        function loadSalarySort() {
+            const saved = localStorage.getItem(SALARY_SORT_KEY);
+            if (saved) {
+                const data = JSON.parse(saved);
+                salarySortBy = data.by || 'month';
+                salarySortOrder = data.order || 'desc';
+            }
+        }
+
+        function saveSalarySort() {
+            localStorage.setItem(SALARY_SORT_KEY, JSON.stringify({
+                by: salarySortBy,
+                order: salarySortOrder
+            }));
+        }
+
+        function sortSalaryTable(column) {
+            // Toggle order if clicking same column, otherwise default to descending
+            if (salarySortBy === column) {
+                salarySortOrder = salarySortOrder === 'desc' ? 'asc' : 'desc';
+            } else {
+                salarySortBy = column;
+                salarySortOrder = 'desc';
+            }
+            
+            saveSalarySort();
+            renderSalaryDashboard();
+        }
+
+        function updateSortIcons() {
+            // Clear all icons
+            document.getElementById('sort-month-icon').innerText = '';
+            document.getElementById('sort-hours-icon').innerText = '';
+            document.getElementById('sort-salary-icon').innerText = '';
+            
+            // Remove active class from all
+            document.querySelectorAll('.salary-table th span').forEach(span => {
+                span.classList.remove('active');
+            });
+            
+            // Set active icon
+            const iconMap = {
+                'month': 'sort-month-icon',
+                'hours': 'sort-hours-icon',
+                'salary': 'sort-salary-icon'
+            };
+            
+            const iconEl = document.getElementById(iconMap[salarySortBy]);
+            if (iconEl) {
+                iconEl.innerText = salarySortOrder === 'desc' ? '↓' : '↑';
+                iconEl.classList.add('active');
+            }
+        }
+
+        function sortHistoryData(history) {
+            return history.sort((a, b) => {
+                let valA, valB;
+                
+                switch(salarySortBy) {
+                    case 'month':
+                        valA = a.month;
+                        valB = b.month;
+                        break;
+                    case 'hours':
+                        valA = a.totalHours;
+                        valB = b.totalHours;
+                        break;
+                    case 'salary':
+                        valA = a.totalSalary;
+                        valB = b.totalSalary;
+                        break;
+                    default:
+                        valA = a.month;
+                        valB = b.month;
+                }
+                
+                if (salarySortOrder === 'asc') {
+                    return valA > valB ? 1 : valA < valB ? -1 : 0;
+                } else {
+                    return valA < valB ? 1 : valA > valB ? -1 : 0;
+                }
+            });
+        }
     </script>
 </body>
 </html>
+
