@@ -729,21 +729,19 @@
             position: fixed;
             bottom: 30px;
             right: 30px;
-            width: 60px;  /* Increased from 50px */
-            height: 60px; /* Increased from 50px */
+            width: 60px;
+            height: 60px;
             background-color: var(--card-bg);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px; /* Increased from 24px */
+            font-size: 28px;
             color: var(--accent-color);
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), /* Smoother bounce */
-                        opacity 0.3s ease,
-                        background 0.2s ease;
+            transition: opacity 0.3s ease, background 0.2s ease;
             z-index: 10;
             opacity: 0;
             pointer-events: none;
@@ -754,19 +752,9 @@
             pointer-events: auto;
         }
 
-        .scroll-top-fab.scrolling {
-            transform: scale(0.65); /* Slightly smaller for more dramatic effect */
-            transition: transform 0.2s ease-out; /* Quick shrink */
-        }
-
-        .scroll-top-fab:not(.scrolling) {
-            transform: scale(1);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); /* Bouncy expand */
-        }
-
         .scroll-top-fab:active {
             background: rgba(255,255,255,0.15);
-            transform: scale(0.9); /* Press effect */
+            transform: scale(0.95);
         }
 
         /* Pulse animation when first appearing */
@@ -2878,42 +2866,16 @@
         }
 
         /* --- SCROLL TO TOP FUNCTIONALITY --- */
-        let scrollTimeout = null;
-
         function initScrollToTop() {
-            const recordsPage = document.getElementById('records-page');
             const scrollTopButton = document.getElementById('scroll-top-btn');
             
-            if (!recordsPage || !scrollTopButton) {
-                console.log('Elements not found');
+            if (!scrollTopButton) {
+                console.log('Button not found');
                 return;
             }
             
             // Always show button on records page
             scrollTopButton.classList.add('visible');
-            
-            // Add scroll listener
-            recordsPage.addEventListener('scroll', function() {
-                handleRecordsScroll();
-            });
-        }
-
-        function handleRecordsScroll() {
-            const scrollTopButton = document.getElementById('scroll-top-btn');
-            if (!scrollTopButton) return;
-            
-            // Add scrolling class (minimizes button)
-            scrollTopButton.classList.add('scrolling');
-            
-            // Clear existing timeout
-            if (scrollTimeout) {
-                clearTimeout(scrollTimeout);
-            }
-            
-            // Wait longer before expanding back (prevents glitches from rapid scroll changes)
-            scrollTimeout = setTimeout(() => {
-                scrollTopButton.classList.remove('scrolling');
-            }, 300); // Increased from 150ms to 300ms for smoother experience
         }
 
         function scrollToTop() {
