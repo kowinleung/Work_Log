@@ -370,10 +370,11 @@
         /* Bottom Tab Bar - Floating Pill Style */
         .tab-bar {
             position: fixed;
-            bottom: 10px;
-            left: 15px;
-            width: calc(100% - 30px); /* Explicit width instead of using 'right' */
-            max-width: calc(100vw - 30px); /* Ensure it doesn't exceed viewport */
+            bottom: 25px; /* Moved up from 10px to avoid home bar */
+            left: 50%; /* Center it */
+            transform: translateX(-50%); /* Center alignment */
+            width: 92%; /* Reduced from calc(100% - 30px) */
+            max-width: 380px; /* Limit maximum width for tablets */
             height: 65px;
             background: rgba(26, 34, 74, 0.95);
             backdrop-filter: blur(10px);
@@ -381,12 +382,11 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 0 8px;
+            padding: 0 4px; /* Reduced from 8px */
             padding-bottom: env(safe-area-inset-bottom);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
             z-index: 1000;
-            border-radius: 30px;
-            position: relative;
+            border-radius: 40px; /* Increased from 30px to match iPhone corners */
             box-sizing: border-box;
         }
 
@@ -394,7 +394,7 @@
         .tab-indicator {
             position: absolute;
             height: 50px;
-            width: 80px;
+            width: 70px; /* Reduced from 80px */
             background: var(--accent-color);
             border-radius: 25px;
             transition: left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
@@ -410,7 +410,7 @@
             align-items: center;
             justify-content: center;
             flex: 1;
-            padding: 8px;
+            padding: 6px; /* Reduced from 8px */
             cursor: pointer;
             transition: all 0.2s ease;
             text-decoration: none;
@@ -418,7 +418,7 @@
             user-select: none;
             position: relative;
             z-index: 1;
-            min-width: 70px;
+            min-width: 60px; /* Reduced from 70px */
         }
 
         .tab-item:active {
@@ -436,6 +436,8 @@
             font-weight: 600;
             letter-spacing: 0.3px;
             text-transform: uppercase;
+            text-align: center; /* Ensure text is centered */
+            width: 100%; /* Take full width for proper centering */
         }
 
         .tab-item.active {
@@ -448,7 +450,7 @@
 
         /* Adjust page padding for tab bar */
         .page {
-            padding-bottom: 85px; /* Space for tab bar */
+            padding-bottom: 105px; /* Space for tab bar */
         }
 
         /* Remove settings FAB since we have tab bar now */
@@ -457,8 +459,23 @@
         }
 
         /* Hide back buttons since tabs handle navigation */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center the content */
+            margin-bottom: 20px;
+            text-align: center; /* Center text */
+        }
+
+        .page-header h2 {
+            flex: 1; /* Take remaining space */
+            text-align: center; /* Center the text */
+            margin: 0; /* Remove default margin */
+        }
+
+        /* Hide back buttons - tabs handle navigation */
         .page-header .back-btn {
-            display: none;
+            display: none !important;
         }
 
         /* --- Activity Logger Styles --- */
@@ -1093,7 +1110,7 @@
             flex-direction: column;
             height: 100vh;
             padding: 20px;
-            padding-bottom: 90px;
+            padding-bottom: 110px;
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -1278,9 +1295,15 @@
         }
 
         .chart-line-bar-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: white;
             margin-top: 4px;
+            text-align: center;
+            word-break: keep-all;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
         }
 
         .chart-line-bar-value {
@@ -1304,6 +1327,37 @@
             font-size: 2rem;
             margin-bottom: 8px;
             opacity: 0.5;
+        }
+
+        /* Vertical bar charts optimized for mobile */
+        .chart-line-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            flex: 1;
+            padding: 10px 2px;
+            min-height: 150px;
+            gap: 4px;
+        }
+
+        .chart-line-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 1px;
+            height: 100%;
+            justify-content: flex-end;
+            max-width: 50px;
+        }
+
+        .chart-line-bar-label {
+            font-size: 0.7rem;
+            color: white;
+            margin-top: 4px;
+            text-align: center;
+            word-break: break-word;
+            line-height: 1.1;
         }
 
     </style>
@@ -1342,11 +1396,11 @@
             <button class="back-btn" onclick="showPage('welcome-page')">←</button>
             <h2>Settings</h2>
         </div>
-        
-        <!-- Data Management Settings -->
+
+        <!-- Data Management Setting -->
         <div class="settings-item">
             <div>
-                <div class="settings-label">📦 Data Management</div>
+                <div class="settings-label">Data Management</div>
                 <div class="settings-sub">Auto export data and settings automatically after each shift ends</div>
             </div>
             <label class="switch">
@@ -1354,26 +1408,58 @@
                 <span class="slider"></span>
             </label>
         </div>
-        
+
         <!-- Export/Import Buttons -->
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-            <button class="btn btn-secondary" onclick="exportDataAndSettings()" style="flex: 1; font-size: 14px; padding: 12px;">
-                📤 Export Data & Settings
-            </button>
-            <button class="btn btn-secondary" onclick="triggerImportSettings()" style="flex: 1; font-size: 14px; padding: 12px;">
-                📥 Import Data & Settings
-            </button>
+            <button class="btn btn-secondary" onclick="exportDataAndSettings()" style="flex: 1; font-size: 14px; padding: 12px;">📤 Export Data & Settings</button>
+            <button class="btn btn-secondary" onclick="triggerImportSettings()" style="flex: 1; font-size: 14px; padding: 12px;">📥 Import Data & Settings</button>
         </div>
         <input type="file" id="import-settings-file" accept=".json" onchange="importDataAndSettings(this)" style="display: none;">
-        
-        <!-- Salary Settings -->
+
+        <!-- Stats Visibility Toggle -->
+        <div class="settings-item">
+            <div>
+                <div class="settings-label">Show Earnings on Home</div>
+                <div class="settings-sub">Display salary summary on welcome screen</div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="setting-show-earnings" onchange="toggleEarningsVisibility()" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <!-- Default Shift Type -->
         <div class="settings-item" style="display: block;">
             <div>
-                <div class="settings-label">💰 Salary Configuration</div>
+                <div class="settings-label">Default Shift Type</div>
+                <div class="settings-sub">Auto-select this shift when starting a new log</div>
+            </div>
+            <select id="setting-default-shift" onchange="saveDefaultShift()" style="width: 100%; margin-top: 10px;">
+                <option value="">No Default</option>
+                <option value="Regular 0830-1730">Regular (0830-1730)</option>
+                <option value="Day 0800-2000">Day (0800-2000)</option>
+                <option value="Night 2000-0800">Night (2000-0800)</option>
+            </select>
+        </div>
+
+        <!-- MOVED UP: Salary Configuration -->
+        <div class="settings-item" style="display: block;">
+            <div>
+                <div class="settings-label">Salary Configuration</div>
                 <div class="settings-sub" id="salary-config-display">Not configured</div>
             </div>
             <button class="btn btn-secondary" style="margin-top: 10px;" onclick="showSalarySetup()">Reconfigure Salary</button>
         </div>
+
+        <!-- Help/Tutorial Button -->
+        <button class="btn btn-secondary" onclick="showHelpTutorial()" style="margin-bottom: 15px;">
+            📖 Help & Tutorial
+        </button>
+
+        <!-- Clear All Data Button -->
+        <button class="btn btn-danger" onclick="showClearDataModal()" style="margin-bottom: 15px;">
+            🗑️ Clear All Data
+        </button>
 
         <div style="margin-top:20px; opacity:0.6; font-size:0.8rem; text-align:center;">
             Version 1.5<br>Shift Logger
@@ -1604,10 +1690,112 @@
             </div>
         </div>
     </div>
+
+    <!-- Clear All Data Confirmation Modal -->
+    <div id="clear-data-modal" class="modal">
+        <div class="modal-content">
+            <h3>⚠️ Clear All Data?</h3>
+            <p style="color: #fca5a5; font-weight: 600; margin: 15px 0;">This action cannot be undone!</p>
+            <p style="font-size: 0.9rem; color: #9ca3af;">This will permanently delete:</p>
+            <ul style="text-align: left; color: #9ca3af; font-size: 0.85rem; margin: 10px 0;">
+                <li>All shift records and activities</li>
+                <li>Salary history and calculations</li>
+                <li>All settings and configurations</li>
+            </ul>
+            <p style="font-size: 0.85rem; color: #fbbf24; margin-top: 15px;">💡 Consider exporting your data first!</p>
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" onclick="closeClearDataModal()">Cancel</button>
+                <button class="btn btn-danger" onclick="confirmClearAllData()">Yes, Delete Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help/Tutorial Modal -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content large" style="max-height: 85vh; overflow-y: auto;">
+            <h3>📖 Help & Tutorial</h3>
+            
+            <div style="text-align: left; margin: 20px 0;">
+                <!-- Getting Started -->
+                <div class="detail-section">
+                    <h4>🚀 Getting Started</h4>
+                    <p style="font-size: 0.9rem; color: #ddd; line-height: 1.6;">
+                        1. Tap <strong>"Start Shift"</strong> on the home screen<br>
+                        2. Select your shift type (Regular/Day/Night)<br>
+                        3. Log activities throughout your shift<br>
+                        4. Tap <strong>"End Shift & Save"</strong> when done
+                    </p>
+                </div>
+
+                <!-- Logging Activities -->
+                <div class="detail-section">
+                    <h4>📝 Logging Activities</h4>
+                    <p style="font-size: 0.9rem; color: #ddd; line-height: 1.6;">
+                        • Choose activity type from dropdown<br>
+                        • Fill in required details (simulator, config, etc.)<br>
+                        • Optionally attach photos<br>
+                        • Tap <strong>"Add Entry"</strong> to save<br>
+                        • Edit or delete entries before ending shift
+                    </p>
+                </div>
+
+                <!-- Navigation -->
+                <div class="detail-section">
+                    <h4>🧭 Navigation</h4>
+                    <p style="font-size: 0.9rem; color: #ddd; line-height: 1.6;">
+                        Use the bottom tab bar to switch between:<br>
+                        • <strong>Home</strong> - Start new shifts<br>
+                        • <strong>Records</strong> - View past shifts<br>
+                        • <strong>Salary</strong> - Track earnings (if configured)<br>
+                        • <strong>Stats</strong> - View your work statistics<br>
+                        • <strong>Settings</strong> - Customize your experience
+                    </p>
+                </div>
+
+                <!-- Salary Tracking -->
+                <div class="detail-section">
+                    <h4>💰 Salary Tracking</h4>
+                    <p style="font-size: 0.9rem; color: #ddd; line-height: 1.6;">
+                        Configure hourly rate in Settings → Salary Configuration<br>
+                        • Set hourly rate<br>
+                        • Add night shift allowance (optional)<br>
+                        • Salary auto-calculates from your logged hours
+                    </p>
+                </div>
+
+                <!-- Data Management -->
+                <div class="detail-section">
+                    <h4>💾 Data Management</h4>
+                    <p style="font-size: 0.9rem; color: #ddd; line-height: 1.6;">
+                        • All data stored locally on your device<br>
+                        • Enable <strong>Auto Export</strong> for automatic backups<br>
+                        • Manually export anytime from Settings<br>
+                        • Import to restore or transfer data
+                    </p>
+                </div>
+
+                <!-- Tips -->
+                <div class="detail-section" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid var(--accent-color);">
+                    <h4>💡 Pro Tips</h4>
+                    <p style="font-size: 0.85rem; color: #ddd; line-height: 1.6;">
+                        • Set a default shift type to save time<br>
+                        • Use search in Records to find specific entries<br>
+                        • Tap months in Salary page for detailed breakdown<br>
+                        • Long-press photos in records to view full size
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-buttons" style="justify-content: center;">
+                <button class="btn btn-primary" onclick="closeHelpModal()">Got It!</button>
+            </div>
+        </div>
+    </div>
+
     <!-- 6. Statistics Page -->
     <div id="stats-page" class="page">
         <div class="page-header">
-            <h2>📊 Statistics</h2>
+            <h2>Statistics</h2>
         </div>
         
         <!-- Summary Cards Row -->
@@ -1932,13 +2120,17 @@
             checkMonthlySalary();
             updateSalaryDisplay();
             updateSalaryConfigDisplay();
-            initScrollToTop(); // Add this line
+            initScrollToTop();
             updateTabIndicator('home');
             history.replaceState({page: 'welcome-page'}, '', '');
-            window.onpopstate = function(event) {
-                if(event.state && event.state.page) showPage(event.state.page, false);
-                else showPage('welcome-page', false);
-            };
+            
+            // NEW: Show tutorial on first launch
+            if (!localStorage.getItem('cae-tutorial-seen')) {
+                setTimeout(() => {
+                    showHelpTutorial();
+                    localStorage.setItem('cae-tutorial-seen', 'true');
+                }, 1500);
+            }
         });
 
         /* --- SETTINGS LOGIC --- */
@@ -2092,7 +2284,17 @@
         function updateSalaryDisplay() {
             const config = getSalaryConfig();
             const widget = document.getElementById('salary-summary-widget');
+            
             if (!config || config.type !== 'hourly') {
+                widget.style.display = 'none';
+                return;
+            }
+            
+            // Check if user wants to show earnings
+            const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+            const showEarnings = settings.showEarnings !== false; // Default to true
+            
+            if (!showEarnings) {
                 widget.style.display = 'none';
                 return;
             }
@@ -2104,13 +2306,10 @@
             if (monthData) {
                 widget.style.display = 'block';
                 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                document.getElementById('current-month-label').innerText = `Current Month (${monthNames[now.getMonth()]} ${now.getFullYear()})`;
-                
-                // Use maskAmount function to respect visibility setting
+                document.getElementById('current-month-label').innerText = `Current Month: ${monthNames[now.getMonth()]} ${now.getFullYear()}`;
                 document.getElementById('current-salary-amount').innerText = maskAmount(monthData.totalSalary);
                 document.getElementById('salary-details-text').innerText = `${monthData.totalHours} hours worked`;
                 
-                // Update the visibility button icon
                 const visBtn = document.getElementById('salary-visibility-btn');
                 if (visBtn) {
                     visBtn.innerText = salaryVisible ? '👁️' : '👁️‍🗨️';
@@ -2552,28 +2751,20 @@
         function updateTabIndicator(tabName) {
             const indicator = document.getElementById('tab-indicator');
             if (!indicator) return;
-            
             const activeTab = document.getElementById(`tab-${tabName}`);
             if (!activeTab) return;
-            
             const tabBar = activeTab.parentElement;
             const tabBarRect = tabBar.getBoundingClientRect();
             const tabRect = activeTab.getBoundingClientRect();
-            
-            const indicatorWidth = 80;
-            
-            // Calculate center position
-            let leftPosition = tabRect.left - tabBarRect.left + (tabRect.width / 2) - (indicatorWidth / 2);
-            
+            const indicatorWidth = 70; // Updated to match CSS
+            // Calculate center position relative to tab
+            let leftPosition = (tabRect.left - tabBarRect.left) + (tabRect.width / 2) - (indicatorWidth / 2);
             // Ensure the pill stays within bounds
-            const maxLeft = tabBarRect.width - indicatorWidth - 10;
-            const minLeft = 10;
-            
+            const maxLeft = tabBarRect.width - indicatorWidth - 8;
+            const minLeft = 4;
             leftPosition = Math.max(minLeft, Math.min(leftPosition, maxLeft));
-            
-            indicator.style.left = `${leftPosition}px`;
+            indicator.style.left = leftPosition + 'px';
         }
-
         // Store current active tab
         let currentActiveTab = 'home';
 
@@ -3659,36 +3850,48 @@
         }
 
         function renderActivityBreakdown(logs) {
-            const activityCounts = {};
+            const activityMap = {};
             logs.forEach(log => {
-                if (log.activities) {
+                if (log.activities && Array.isArray(log.activities)) {
                     log.activities.forEach(act => {
                         const type = act.type || 'Other';
-                        activityCounts[type] = (activityCounts[type] || 0) + 1;
+                        activityMap[type] = (activityMap[type] || 0) + 1;
                     });
                 }
             });
             
-            const sorted = Object.entries(activityCounts).sort((a, b) => b[1] - a[1]);
-            const maxCount = sorted[0] ? sorted[0][1] : 1;
-            let html = '';
-            const maxBarWidth = 150;
+            const sorted = Object.entries(activityMap).sort((a, b) => b[1] - a[1]);
             
-            sorted.forEach(([type, count]) => {
-                const barWidth = Math.round((count / maxCount) * maxBarWidth);
-                const shortType = type.replace('Morning Briefing', 'Briefing')
-                                    .replace('Session Change', 'Session')
-                                    .replace('Preflight Checks', 'Preflight')
-                                    .replace('Walk-Around Check', 'Walk-Around')
-                                    .replace('Preventive Maintenance', 'PM');
-                html += '<div class="chart-bar">';
-                html += '<div class="chart-bar-label">' + shortType + '</div>';
-                html += '<div class="chart-bar-visual" style="width: ' + barWidth + 'px;"></div>';
-                html += '<div class="chart-bar-value">' + count + '</div>';
+            if (sorted.length === 0) {
+                document.getElementById('activity-breakdown').innerHTML = '<div class="empty-stats"><div class="empty-stats-icon">📊</div><div>No activities logged</div></div>';
+                return;
+            }
+            
+            // Smart abbreviations
+            const abbreviations = {
+                'Morning Briefing': 'Brief',
+                'Session Change': 'Session',
+                'Preflight Checks': 'Preflight',
+                'Walk-Around Check': 'WAs.',
+                'Preventive Maintenance': 'PM',
+                'Other': 'Other'
+            };
+            
+            const maxCount = Math.max(...sorted.map(s => s[1]));
+            let html = '<div class="chart-line-container" style="min-height: 120px;">';
+            
+            sorted.forEach(([name, count]) => {
+                const heightPercent = (count / maxCount) * 100;
+                const shortName = abbreviations[name] || (name.length > 7 ? name.substring(0, 6) + '.' : name);
+                html += '<div class="chart-line-bar">';
+                html += '<div class="chart-line-bar-value">' + count + '</div>';
+                html += '<div class="chart-line-bar-visual" style="height: ' + heightPercent + '%;"></div>';
+                html += '<div class="chart-line-bar-label" title="' + name + '">' + shortName + '</div>';
                 html += '</div>';
             });
+            html += '</div>';
             
-            document.getElementById('activity-breakdown').innerHTML = html || '<div class="empty-stats"><div>No activities</div></div>';
+            document.getElementById('activity-breakdown').innerHTML = html;
         }
 
         function renderShiftDistribution(logs) {
@@ -3746,37 +3949,36 @@
         }
 
         function renderSimulatorUsage(logs) {
-            const simCounts = {};
-            
+            const simMap = {};
             logs.forEach(log => {
-                if (log.activities) {
+                if (log.activities && Array.isArray(log.activities)) {
                     log.activities.forEach(act => {
-                        // Use 'sim' field instead of 'simulator'
-                        if (act.sim && act.sim !== '') {
-                            simCounts[act.sim] = (simCounts[act.sim] || 0) + 1;
+                        if (act.sim) {  // Changed from act.simulator to act.sim
+                            simMap[act.sim] = (simMap[act.sim] || 0) + 1;
                         }
                     });
                 }
             });
             
-            const sorted = Object.entries(simCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+            const sorted = Object.entries(simMap).sort((a, b) => b[1] - a[1]);
+            
             if (sorted.length === 0) {
-                document.getElementById('simulator-usage').innerHTML = '<div class="empty-stats"><div>No data</div></div>';
+                document.getElementById('simulator-usage').innerHTML = '<div class="empty-stats"><div class="empty-stats-icon">🎮</div><div>No simulator data</div></div>';
                 return;
             }
             
-            const maxCount = sorted[0][1];
-            let html = '';
-            const maxBarWidth = 120;
+            const maxCount = Math.max(...sorted.map(s => s[1]));
+            let html = '<div class="chart-line-container" style="min-height: 120px;">';
             
-            sorted.forEach(([sim, count]) => {
-                const barWidth = Math.round((count / maxCount) * maxBarWidth);
-                html += '<div class="chart-bar">';
-                html += '<div class="chart-bar-label">' + sim + '</div>';
-                html += '<div class="chart-bar-visual" style="width: ' + barWidth + 'px; background: #10b981;"></div>';
-                html += '<div class="chart-bar-value">' + count + '</div>';
+            sorted.forEach(([name, count]) => {
+                const heightPercent = (count / maxCount) * 100;
+                html += '<div class="chart-line-bar">';
+                html += '<div class="chart-line-bar-value">' + count + '</div>';
+                html += '<div class="chart-line-bar-visual" style="height: ' + heightPercent + '%;"></div>';
+                html += '<div class="chart-line-bar-label">' + name + '</div>';
                 html += '</div>';
             });
+            html += '</div>';
             
             document.getElementById('simulator-usage').innerHTML = html;
         }
@@ -3862,6 +4064,144 @@
                 renderMonthlyTrend(logs);
             }
         }
+
+        // ====== NEW SETTINGS FEATURES ======
+
+        // Stats Visibility Setting
+        function toggleEarningsVisibility() {
+            const showEarnings = document.getElementById('setting-show-earnings').checked;
+            const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+            settings.showEarnings = showEarnings;
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            
+            // Update display immediately
+            const widget = document.getElementById('salary-summary-widget');
+            if (widget) {
+                const config = getSalaryConfig();
+                if (config && config.type === 'hourly') {
+                    widget.style.display = showEarnings ? 'block' : 'none';
+                }
+            }
+        }
+
+        // Default Shift Type Setting
+        function saveDefaultShift() {
+            const defaultShift = document.getElementById('setting-default-shift').value;
+            const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+            settings.defaultShift = defaultShift;
+            localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+            showAlert('Default shift type saved!', 'Success');
+        }
+
+        function applyDefaultShift() {
+            const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+            if (settings.defaultShift) {
+                // Clear previous selection
+                document.querySelectorAll('.shift-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                
+                // Select default
+                const defaultCard = document.querySelector(`.shift-card[data-value="${settings.defaultShift}"]`);
+                if (defaultCard) {
+                    defaultCard.classList.add('selected');
+                    document.getElementById('shift-type').value = settings.defaultShift;
+                }
+            }
+        }
+
+        // Clear All Data
+        function showClearDataModal() {
+            document.getElementById('clear-data-modal').style.display = 'flex';
+        }
+
+        function closeClearDataModal() {
+            document.getElementById('clear-data-modal').style.display = 'none';
+        }
+
+        function confirmClearAllData() {
+            // Clear all localStorage data
+            localStorage.removeItem('cae-logs');
+            localStorage.removeItem(CURRENT_SHIFT_KEY);
+            localStorage.removeItem(CURRENT_ACTIVITIES_KEY);
+            localStorage.removeItem(SETTINGS_KEY);
+            localStorage.removeItem(SALARY_CONFIG_KEY);
+            localStorage.removeItem(SALARY_HISTORY_KEY);
+            localStorage.removeItem(LAST_CHECK_KEY);
+            localStorage.removeItem('cae-salary-visibility');
+            localStorage.removeItem('cae-salary-sort');
+            
+            closeClearDataModal();
+            showAlert('All data has been cleared successfully!', 'Success');
+            
+            // Reload page after 1 second
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        }
+
+        // Help/Tutorial
+        function showHelpTutorial() {
+            document.getElementById('help-modal').style.display = 'flex';
+        }
+
+        function closeHelpModal() {
+            document.getElementById('help-modal').style.display = 'none';
+        }
+
+        // Update loadSettings function to include new settings
+        function loadSettings() {
+            const savedSettings = localStorage.getItem(SETTINGS_KEY);
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                
+                // Existing auto export
+                autoExportEnabled = settings.autoExport;
+                document.getElementById('setting-auto-export').checked = autoExportEnabled;
+                
+                // NEW: Show earnings toggle
+                const showEarnings = settings.showEarnings !== false; // Default to true
+                document.getElementById('setting-show-earnings').checked = showEarnings;
+                
+                // NEW: Default shift
+                if (settings.defaultShift) {
+                    document.getElementById('setting-default-shift').value = settings.defaultShift;
+                }
+            }
+        }
+
+        // Update the onStartShift function to apply default shift
+        function onStartShift() {
+            const curr = localStorage.getItem(CURRENT_SHIFT_KEY);
+            
+            if (curr) {
+                const data = JSON.parse(curr);
+                const acts = JSON.parse(localStorage.getItem(CURRENT_ACTIVITIES_KEY) || '[]');
+                
+                if (acts.length === 0) {
+                    document.getElementById('empty-draft-modal').style.display = 'flex';
+                } else {
+                    document.getElementById('start-modal').style.display = 'flex';
+                }
+            } else {
+                startNewShift();
+            }
+        }
+
+        function startNewShift() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('shift-date').value = today;
+            
+            // Apply default shift if set
+            applyDefaultShift();
+            
+            currentActivities = [];
+            localStorage.removeItem(CURRENT_ACTIVITIES_KEY);
+            renderActivityList();
+            
+            showPage('shift-page');
+        }
+
 
     </script>
 </body>
