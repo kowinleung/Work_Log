@@ -366,6 +366,100 @@
             opacity: 0.7;
             display: block;
         }
+        
+        /* Bottom Tab Bar - Floating Pill Style */
+        .tab-bar {
+            position: fixed;
+            bottom: 10px;
+            left: 15px;
+            width: calc(100% - 30px); /* Explicit width instead of using 'right' */
+            max-width: calc(100vw - 30px); /* Ensure it doesn't exceed viewport */
+            height: 65px;
+            background: rgba(26, 34, 74, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 8px;
+            padding-bottom: env(safe-area-inset-bottom);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            border-radius: 30px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        /* Active Tab Indicator Pill */
+        .tab-indicator {
+            position: absolute;
+            height: 50px;
+            width: 80px;
+            background: var(--accent-color);
+            border-radius: 25px;
+            transition: left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            z-index: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
+        }
+
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #8da4ef;
+            user-select: none;
+            position: relative;
+            z-index: 1;
+            min-width: 70px;
+        }
+
+        .tab-item:active {
+            transform: scale(0.95);
+        }
+
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .tab-item.active {
+            color: #ffffff;
+        }
+
+        .tab-item.active .tab-icon {
+            transform: translateY(-1px);
+        }
+
+        /* Adjust page padding for tab bar */
+        .page {
+            padding-bottom: 85px; /* Space for tab bar */
+        }
+
+        /* Remove settings FAB since we have tab bar now */
+        .settings-fab {
+            display: none;
+        }
+
+        /* Hide back buttons since tabs handle navigation */
+        .page-header .back-btn {
+            display: none;
+        }
 
         /* --- Activity Logger Styles --- */
         .activity-builder {
@@ -727,7 +821,7 @@
         /* Scroll to Top FAB */
         .scroll-top-fab {
             position: fixed;
-            bottom: 30px;
+            bottom: 90px;  /* Changed from 30px to 90px to sit above tab bar */
             right: 30px;
             width: 60px;
             height: 60px;
@@ -992,6 +1086,226 @@
             align-items: center;
             justify-content: center;
         }
+
+        /* --- Statistics Page Styles --- */
+        #stats-page.active {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 20px;
+            padding-bottom: 90px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        #stats-page .page-header {
+            flex-shrink: 0;
+        }
+
+        .stats-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+        }
+
+        .mini-stat-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 10px 5px;
+            text-align: center;
+        }
+
+        .mini-stat-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .mini-stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 2px 0;
+        }
+
+        .mini-stat-label {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stats-two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .stats-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .stats-chart-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .stats-chart-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.85rem;
+            color: #8da4ef;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .chart-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            font-size: 0.8rem;
+            overflow-y: auto;
+            padding: 8px 5px;
+            min-height: 0;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .chart-bar-label {
+            width: 85px;
+            font-size: 0.85rem;
+            color: #ddd;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-shrink: 0;
+        }
+
+        .chart-bar-visual {
+            height: 20px;
+            background: var(--accent-color);
+            border-radius: 4px;
+            margin: 0 8px;
+            min-width: 10px;
+        }
+
+        .chart-bar-value {
+            font-size: 0.85rem;
+            color: #fff;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .chart-donut-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        .chart-donut-item:last-child {
+            border-bottom: none;
+        }
+
+        .chart-donut-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .chart-donut-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .chart-donut-value {
+            font-weight: 600;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
+
+        .chart-line-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            flex: 1;
+            padding: 10px 5px;
+            min-height: 150px;
+        }
+
+        .chart-line-bar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 2px;
+            height: 100%;
+            justify-content: flex-end;
+        }
+
+        .chart-line-bar-visual {
+            width: 100%;
+            background: linear-gradient(180deg, var(--accent-color), rgba(59, 130, 246, 0.5));
+            border-radius: 4px 4px 0 0;
+            min-height: 10px;
+        }
+
+        .chart-line-bar-label {
+            font-size: 0.75rem;
+            color: white;
+            margin-top: 4px;
+        }
+
+        .chart-line-bar-value {
+            font-size: 0.7rem;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .empty-stats {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+
+        .empty-stats-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            opacity: 0.5;
+        }
+
     </style>
 </head>
 <body>
@@ -1018,11 +1332,9 @@
 
         <button class="btn btn-primary" onclick="onStartShift()">Start Shift</button>
         <button id="continue-btn" class="btn btn-secondary" style="display:none" onclick="continueShift()">Continue Shift</button>
-        <button class="btn btn-secondary" onclick="showPage('records-page')">Shift Record</button>
-
-        <!-- New Settings FAB -->
-        <button class="settings-fab" onclick="showPage('settings-page')">⚙️</button>
+        <!-- Removed "Shift Record" button - use tabs instead -->
     </div>
+
 
     <!-- 4. Settings Page -->
     <div id="settings-page" class="page">
@@ -1030,17 +1342,30 @@
             <button class="back-btn" onclick="showPage('welcome-page')">←</button>
             <h2>Settings</h2>
         </div>
+        
+        <!-- Data Management Settings -->
         <div class="settings-item">
             <div>
-                <div class="settings-label">Auto-Export Records</div>
-                <div class="settings-sub">Export JSON file automatically after Ending Shift</div>
+                <div class="settings-label">📦 Data Management</div>
+                <div class="settings-sub">Auto export data and settings automatically after each shift ends</div>
             </div>
             <label class="switch">
                 <input type="checkbox" id="setting-auto-export" onchange="toggleAutoExport()">
                 <span class="slider"></span>
             </label>
         </div>
-
+        
+        <!-- Export/Import Buttons -->
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn btn-secondary" onclick="exportDataAndSettings()" style="flex: 1; font-size: 14px; padding: 12px;">
+                📤 Export Data & Settings
+            </button>
+            <button class="btn btn-secondary" onclick="triggerImportSettings()" style="flex: 1; font-size: 14px; padding: 12px;">
+                📥 Import Data & Settings
+            </button>
+        </div>
+        <input type="file" id="import-settings-file" accept=".json" onchange="importDataAndSettings(this)" style="display: none;">
+        
         <!-- Salary Settings -->
         <div class="settings-item" style="display: block;">
             <div>
@@ -1048,7 +1373,6 @@
                 <div class="settings-sub" id="salary-config-display">Not configured</div>
             </div>
             <button class="btn btn-secondary" style="margin-top: 10px;" onclick="showSalarySetup()">Reconfigure Salary</button>
-            <button class="btn btn-secondary" style="margin-top: 5px; font-size: 0.85rem; padding: 10px;" onclick="recalculateAllHistory()">Recalculate History</button>
         </div>
 
         <div style="margin-top:20px; opacity:0.6; font-size:0.8rem; text-align:center;">
@@ -1174,17 +1498,14 @@
     </div>
 
     <!-- 3. Records Page -->
-    <div id="records-page" class="page">
+    <div id="shifts-page" class="page">
         <div class="page-header">
             <button class="back-btn" onclick="history.back()">←</button>
             <h2>Shift Records</h2>
         </div>
-        <div class="data-controls">
-            <button class="btn btn-secondary" onclick="exportData()" style="font-size: 14px; padding: 10px;">📤 Export</button>
-            <button class="btn btn-secondary" onclick="triggerImport()" style="font-size: 14px; padding: 10px;">📥 Import</button>
-            <button class="btn btn-primary" onclick="showPage('salary-page')" style="font-size: 14px; padding: 10px;">💰 Salary</button>
-            <input type="file" id="import-file" accept=".json" onchange="importData(this)">
-        </div>
+        
+        <!-- REMOVED data-controls div with export/import buttons -->
+        
         <div class="filter-section">
             <input type="search" id="search-input" placeholder="🔍 Search records..." onkeyup="renderRecords()">
             <div class="filter-row">
@@ -1228,20 +1549,26 @@
             <button class="back-btn" onclick="history.back()">←</button>
             <h2>Salary Dashboard</h2>
         </div>
-
+        
         <div id="salary-not-configured" style="text-align:center; padding:40px;">
             <p style="color:#9ca3af;">Salary tracking is not configured.</p>
             <button class="btn btn-primary" onclick="showSalarySetup()">Configure Now</button>
         </div>
-
+        
         <div id="salary-dashboard-content" style="display:none;">
+            <!-- Refresh Button -->
+            <button class="btn btn-secondary" style="margin-bottom: 20px; font-size: 0.9rem; padding: 12px;" onclick="refreshSalaryRecords()">
+                🔄 Refresh Salary Records
+            </button>
+            
             <!-- Total Earnings Card -->
             <div class="salary-summary" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.05)); border-color: rgba(59, 130, 246, 0.3); margin-bottom: 20px;">
                 <h3 style="color: #93c5fd;">TOTAL EARNINGS</h3>
                 <div class="salary-amount" style="color: #3b82f6;" id="total-earnings-amount">HKD$ 0</div>
                 <div class="salary-details" id="total-earnings-details">All time</div>
             </div>
-
+            
+            <!-- Rest of salary dashboard content stays the same -->
             <div class="salary-stats">
                 <div class="stat-card">
                     <h4>This Month</h4>
@@ -1252,7 +1579,7 @@
                     <div class="value" id="stat-current-salary">HKD$ 0</div>
                 </div>
             </div>
-
+            
             <div class="salary-table">
                 <h3 style="margin-top:0;">Monthly History</h3>
                 <p style="font-size:0.85rem; color:#9ca3af; margin-top:0;">Tap any month to view details</p>
@@ -1274,6 +1601,74 @@
                         <!-- Populated by JS -->
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+    <!-- 6. Statistics Page -->
+    <div id="stats-page" class="page">
+        <div class="page-header">
+            <h2>📊 Statistics</h2>
+        </div>
+        
+        <!-- Summary Cards Row -->
+        <div class="stats-summary-grid">
+            <div class="mini-stat-card">
+                <div class="mini-stat-icon">📅</div>
+                <div class="mini-stat-value" id="stat-total-days">0</div>
+                <div class="mini-stat-label">Days</div>
+            </div>
+            <div class="mini-stat-card">
+                <div class="mini-stat-icon">⏱️</div>
+                <div class="mini-stat-value" id="stat-total-hours">0</div>
+                <div class="mini-stat-label">Hours</div>
+            </div>
+            <div class="mini-stat-card">
+                <div class="mini-stat-icon">📝</div>
+                <div class="mini-stat-value" id="stat-total-activities">0</div>
+                <div class="mini-stat-label">Activities</div>
+            </div>
+            <div class="mini-stat-card">
+                <div class="mini-stat-icon">💰</div>
+                <div class="mini-stat-value" id="stat-total-earnings">-</div>
+                <div class="mini-stat-label">Earnings</div>
+            </div>
+        </div>
+        
+        <!-- Two Column Layout for Charts -->
+        <div class="stats-two-column">
+            <!-- Left Column -->
+            <div class="stats-column">
+                <!-- Activity Breakdown -->
+                <div class="stats-chart-card">
+                    <h4>🎯 Activity Types</h4>
+                    <div id="activity-breakdown" class="chart-content"></div>
+                </div>
+                
+                <!-- Simulator Usage -->
+                <div class="stats-chart-card">
+                    <h4>🎮 Simulator Usage</h4>
+                    <div id="simulator-usage" class="chart-content"></div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="stats-column">
+                <!-- Shift Distribution -->
+                <div class="stats-chart-card">
+                    <h4>🔄 Shift Types</h4>
+                    <div id="shift-distribution" class="chart-content"></div>
+                </div>
+                
+                <!-- Monthly Trend -->
+                <div class="stats-chart-card">
+                    <h4>📊 MONTHLY HOURS <span id="monthly-year-display">(2025)</span></h4>
+                    <div id="year-nav" style="display: none; justify-content: center; gap: 15px; margin-bottom: 8px; align-items: center;">
+                        <button onclick="changeMonthlyYear(-1)" style="background: none; border: 1px solid rgba(255,255,255,0.3); color: #8da4ef; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">◀ Prev</button>
+                        <span id="year-indicator" style="color: #fff; font-weight: 600; font-size: 0.9rem;">2025</span>
+                        <button onclick="changeMonthlyYear(1)" style="background: none; border: 1px solid rgba(255,255,255,0.3); color: #8da4ef; padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Next ▶</button>
+                    </div>
+                    <div id="monthly-trend" class="chart-content"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -1435,41 +1830,67 @@
     </div>
 
     <!-- Add Adjustment Modal -->
-    <div id="add-adjustment-modal" class="modal">
-        <div class="modal-content">
-            <h3 id="adjustment-modal-title">Add Adjustment</h3>
-            
-            <div class="form-group">
-                <label>Type</label>
-                <select id="adjustment-type">
-                    <option value="Overtime">Overtime</option>
-                    <option value="Reimbursement">Reimbursement</option>
-                    <option value="Bonus">Bonus</option>
-                    <option value="Deduction">Deduction</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Amount (HKD$)</label>
-                <input type="number" id="adjustment-amount" placeholder="Enter amount" step="0.01">
-                <small style="color:#9ca3af; font-size:0.8rem; display:block; margin-top:5px;">
-                    Positive for additions, negative for deductions
-                </small>
-            </div>
-
-            <div class="form-group">
-                <label>Description (Optional)</label>
-                <textarea id="adjustment-description" placeholder="Add notes..." style="min-height:60px;"></textarea>
-            </div>
-
-            <input type="hidden" id="edit-adjustment-index" value="-1">
-
-            <div class="modal-buttons">
-                <button class="btn btn-secondary" onclick="closeAddAdjustmentModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="saveAdjustment()">Save</button>
+        <div id="add-adjustment-modal" class="modal">
+            <div class="modal-content">
+                <h3 id="adjustment-modal-title">Add Adjustment</h3>
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="adjustment-type">
+                        <option value="Overtime">Overtime</option>
+                        <option value="Reimbursement">Reimbursement</option>
+                        <option value="Bonus">Bonus</option>
+                        <option value="Deduction">Deduction</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount (HKD)</label>
+                    <input type="number" id="adjustment-amount" placeholder="Enter amount" step="0.01">
+                    <small style="color:#9ca3af; font-size:0.8rem; display:block; margin-top:5px;">
+                        Positive for additions, negative for deductions
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Description (Optional)</label>
+                    <textarea id="adjustment-description" placeholder="Add notes..." style="min-height:60px"></textarea>
+                </div>
+                <input type="hidden" id="edit-adjustment-index" value="-1">
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closeAddAdjustmentModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveAdjustment()">Save</button>
+                </div>
             </div>
         </div>
+        
+        <!-- Bottom Tab Bar -->
+        <div class="tab-bar">
+            <!-- Active Tab Indicator -->
+            <div class="tab-indicator" id="tab-indicator"></div>
+            
+            <div class="tab-item active" onclick="switchTab('home')" id="tab-home">
+                <div class="tab-icon">🏠</div>
+                <div class="tab-label">Home</div>
+            </div>
+            <div class="tab-item" onclick="switchTab('shifts')" id="tab-shifts">
+                <div class="tab-icon">📝</div>
+                <div class="tab-label">Records</div>
+            </div>
+            <div class="tab-item" onclick="switchTab('salary')" id="tab-salary">
+                <div class="tab-icon">💰</div>
+                <div class="tab-label">Salary</div>
+            </div>
+            <div class="tab-item" onclick="switchTab('stats')" id="tab-stats">
+                <div class="tab-icon">📊</div>
+                <div class="tab-label">Stats</div>
+            </div>
+            <div class="tab-item" onclick="switchTab('settings')" id="tab-settings">
+                <div class="tab-icon">⚙️</div>
+                <div class="tab-label">Settings</div>
+            </div>
+        </div>
+        </body>
+    </html>
+    </div>
     </div>
 
     <script>
@@ -1491,6 +1912,8 @@
         let isEditingMode = false;
         let autoExportEnabled = true;
         let currentMonthKey = '';
+        let currentMonthlyYear = new Date().getFullYear();
+        let availableYears = [];
 
         const CURRENT_SHIFT_KEY = 'cae_current_shift';
         const CURRENT_ACTIVITIES_KEY = 'cae_current_acts_obj';
@@ -1510,7 +1933,7 @@
             updateSalaryDisplay();
             updateSalaryConfigDisplay();
             initScrollToTop(); // Add this line
-
+            updateTabIndicator('home');
             history.replaceState({page: 'welcome-page'}, '', '');
             window.onpopstate = function(event) {
                 if(event.state && event.state.page) showPage(event.state.page, false);
@@ -1578,32 +2001,30 @@
                 return;
             }
 
-            const config = {
-                type: selected.value
-            };
-
+            const config = { type: selected.value };
+            
             if (selected.value === 'hourly') {
                 const rate = parseFloat(document.getElementById('hourly-rate').value);
                 const allowance = parseFloat(document.getElementById('night-allowance').value);
-
+                
                 if (!rate || rate <= 0) {
                     showAlert('Please enter a valid hourly rate.');
                     return;
                 }
-
+                
                 config.hourlyRate = rate;
                 config.nightAllowance = allowance || 0;
             }
-
+            
             localStorage.setItem(SALARY_CONFIG_KEY, JSON.stringify(config));
             closeSalarySetup();
             
             if (config.type === 'hourly') {
                 calculateAllHistoricalSalary();
+                updateSalaryDisplay();
+                updateSalaryConfigDisplay();
             }
             
-            updateSalaryDisplay();
-            updateSalaryConfigDisplay();
             showAlert('Salary configuration saved and history calculated!', 'Success');
         }
 
@@ -1671,30 +2092,29 @@
         function updateSalaryDisplay() {
             const config = getSalaryConfig();
             const widget = document.getElementById('salary-summary-widget');
-
             if (!config || config.type !== 'hourly') {
                 widget.style.display = 'none';
                 return;
             }
-
+            
             const now = new Date();
             const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
             const monthData = getMonthData(monthKey);
             
             if (monthData) {
                 widget.style.display = 'block';
-                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                                'July', 'August', 'September', 'October', 'November', 'December'];
-                
-                document.getElementById('current-month-label').innerText = 
-                    `Current Month (${monthNames[now.getMonth()]} ${now.getFullYear()})`;
+                const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                document.getElementById('current-month-label').innerText = `Current Month (${monthNames[now.getMonth()]} ${now.getFullYear()})`;
                 
                 // Use maskAmount function to respect visibility setting
-                document.getElementById('current-salary-amount').innerText = 
-                    maskAmount(monthData.totalSalary);
+                document.getElementById('current-salary-amount').innerText = maskAmount(monthData.totalSalary);
+                document.getElementById('salary-details-text').innerText = `${monthData.totalHours} hours worked`;
                 
-                document.getElementById('salary-details-text').innerText = 
-                    `${monthData.totalHours} hours worked`;
+                // Update the visibility button icon
+                const visBtn = document.getElementById('salary-visibility-btn');
+                if (visBtn) {
+                    visBtn.innerText = salaryVisible ? '👁️' : '👁️‍🗨️';
+                }
             } else {
                 widget.style.display = 'none';
             }
@@ -1750,16 +2170,15 @@
             localStorage.setItem(SALARY_HISTORY_KEY, JSON.stringify(newHistory));
         }
 
-        function recalculateAllHistory() {
+        function refreshSalaryRecords() {
             const config = getSalaryConfig();
             if (!config || config.type !== 'hourly') {
                 showAlert('Please configure hourly salary first.');
                 return;
             }
-
             calculateAllHistoricalSalary();
-            updateSalaryDisplay();
-            showAlert('Salary history recalculated for all past records!', 'Success');
+            renderSalaryDashboard(); // Re-render to show updated data
+            showAlert('Salary records refreshed successfully!', 'Success');
         }
 
         function checkMonthlySalary() {
@@ -2080,7 +2499,34 @@
             document.getElementById(pageId).classList.add('active');
             currentPageId = pageId;
 
-            if(pageId === 'records-page') {
+            // Sync tab bar
+            const pageTabMap = {
+                'welcome-page': 'home',
+                'shift-page': 'home', // Changed from 'shifts' to 'home' - logging belongs to home
+                'shifts-page': 'shifts',
+                'salary-page': 'salary',
+                'stats-page': 'stats',
+                'settings-page': 'settings'
+            };
+            
+            const tabName = pageTabMap[pageId];
+            if (tabName) {
+                currentActiveTab = tabName; // Update current tab tracker
+                
+                // Update tab styling
+                document.querySelectorAll('.tab-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                const tabElement = document.getElementById(`tab-${tabName}`);
+                if (tabElement) {
+                    tabElement.classList.add('active');
+                }
+                
+                // Update indicator position
+                updateTabIndicator(tabName);
+            }
+
+            if(pageId === 'shifts-page') {
                 populateYearFilter();
                 renderRecords();
                 setTimeout(initScrollToTop, 100);
@@ -2096,7 +2542,76 @@
                 updateSalaryDisplay();
             }
 
+            if (pageId === 'stats-page') {
+                renderStatistics();
+            }
+
             if (addHistory) history.pushState({page: pageId}, '', '');
+        }
+        
+        function updateTabIndicator(tabName) {
+            const indicator = document.getElementById('tab-indicator');
+            if (!indicator) return;
+            
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            if (!activeTab) return;
+            
+            const tabBar = activeTab.parentElement;
+            const tabBarRect = tabBar.getBoundingClientRect();
+            const tabRect = activeTab.getBoundingClientRect();
+            
+            const indicatorWidth = 80;
+            
+            // Calculate center position
+            let leftPosition = tabRect.left - tabBarRect.left + (tabRect.width / 2) - (indicatorWidth / 2);
+            
+            // Ensure the pill stays within bounds
+            const maxLeft = tabBarRect.width - indicatorWidth - 10;
+            const minLeft = 10;
+            
+            leftPosition = Math.max(minLeft, Math.min(leftPosition, maxLeft));
+            
+            indicator.style.left = `${leftPosition}px`;
+        }
+
+        // Store current active tab
+        let currentActiveTab = 'home';
+
+        // Add resize listener to reposition indicator
+        window.addEventListener('resize', function() {
+            updateTabIndicator(currentActiveTab);
+        });
+
+        // Update switchTab to track current tab
+        function switchTab(tabName) {
+            currentActiveTab = tabName; // Track active tab
+            
+            // Update active tab styling
+            document.querySelectorAll('.tab-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            activeTab.classList.add('active');
+            
+            // Move the indicator pill
+            updateTabIndicator(tabName);
+            
+            // Map tab names to page IDs
+            const tabPageMap = {
+                'home': 'welcome-page',
+                'shifts': 'shifts-page',
+                'salary': 'salary-page',
+                'stats': 'stats-page',
+                'settings': 'settings-page'
+            };
+            
+            const pageId = tabPageMap[tabName];
+            if (pageId) {
+                showPage(pageId, false);
+                if (tabName === 'stats') {
+                    renderStatistics();
+                }
+            }
         }
 
         /* --- Custom Alert Logic --- */
@@ -2434,7 +2949,8 @@
                 log: ''
             });
 
-            showPage('shift-page');
+            switchTab('shifts'); // Use tab navigation
+            showPage('shift-page', false);
             updateMorningBriefingVisibility();
         }
 
@@ -2457,8 +2973,10 @@
             const card = document.querySelector(`.shift-card[data-value="${current.type}"]`);
             if(card) selectShiftCard(card, current.type);
 
-            showPage('shift-page');
+            switchTab('shifts'); // Use tab navigation
+            showPage('shift-page', false);
         }
+
 
         function continueFromModal() {
             document.getElementById('empty-draft-modal').style.display = 'none';
@@ -2654,7 +3172,7 @@
             }
             return `${ordinal(info.overall)} Shift`;
         }
-
+        
         /* --- Records Logic --- */
         function populateYearFilter() {
             const records = JSON.parse(localStorage.getItem('cae_logs') || '[]');
@@ -2805,7 +3323,109 @@
                 showPage('shift-page');
             }
         }
+        
+        /* --- EXPORT/IMPORT DATA & SETTINGS --- */
+        function exportDataAndSettings() {
+            const logs = JSON.parse(localStorage.getItem('cae_logs') || '[]');  // Changed : to _
+            const settings = JSON.parse(localStorage.getItem('cae_settings') || '{"autoExport": true}');  // Changed
+            const salaryConfig = JSON.parse(localStorage.getItem('cae_salary_config') || 'null');  // Changed
+            const salaryHistory = JSON.parse(localStorage.getItem('cae_salary_history') || '[]');  // Changed
+            const salaryVisibility = JSON.parse(localStorage.getItem('cae_salary_visible') || 'true');  // Changed
+            const salarySort = JSON.parse(localStorage.getItem('cae_salary_sort') || '{"by":"month","order":"desc"}');  // Changed
+            
+            const exportData = {
+                version: '1.5',
+                exportDate: new Date().toISOString(),
+                logs: logs,
+                settings: settings,
+                salaryConfig: salaryConfig,
+                salaryHistory: salaryHistory,
+                salaryVisibility: salaryVisibility,
+                salarySort: salarySort
+            };
+            
+            const json = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+            a.download = `shift-logger-backup-${timestamp}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showAlert(`Exported ${logs.length} records and all settings!`, 'Success');
+        }
 
+        function triggerImportSettings() {
+            document.getElementById('import-settings-file').click();
+        }
+
+        function importDataAndSettings(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    
+                    if (Array.isArray(imported)) {
+                        localStorage.setItem('cae_logs', JSON.stringify(imported));
+                        showAlert(`Imported ${imported.length} records (old format).`, 'Success');
+                    } else if (imported.logs && Array.isArray(imported.logs)) {
+                        localStorage.setItem('cae_logs', JSON.stringify(imported.logs));
+                        
+                        if (imported.settings) {
+                            localStorage.setItem('cae_settings', JSON.stringify(imported.settings));
+                            autoExportEnabled = imported.settings.autoExport;
+                            document.getElementById('setting-auto-export').checked = autoExportEnabled;
+                        }
+                        
+                        if (imported.salaryConfig) {
+                            localStorage.setItem('cae_salary_config', JSON.stringify(imported.salaryConfig));
+                        }
+                        
+                        if (imported.salaryHistory) {
+                            localStorage.setItem('cae_salary_history', JSON.stringify(imported.salaryHistory));
+                        }
+                        
+                        if (imported.salaryVisibility !== undefined) {
+                            localStorage.setItem('cae_salary_visible', JSON.stringify(imported.salaryVisibility));
+                        }
+                        
+                        if (imported.salarySort) {
+                            localStorage.setItem('cae_salary_sort', JSON.stringify(imported.salarySort));
+                        }
+                        
+                        updateSalaryConfigDisplay();
+                        updateSalaryDisplay();
+                        loadSalaryVisibility();
+                        loadSalarySort();
+                        
+                        showAlert(`Imported ${imported.logs.length} records and all settings!`, 'Success');
+                    } else {
+                        showAlert('Invalid file format.');
+                        return;
+                    }
+                    
+                    const config = getSalaryConfig();
+                    if (config && config.type === 'hourly') {
+                        calculateAllHistoricalSalary();
+                        updateSalaryDisplay();
+                    }
+                    
+                    renderRecords();
+                } catch (err) {
+                    showAlert('Failed to import: Invalid JSON file.');
+                    console.error(err);
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        // Keep old exportData function for backward compatibility (auto-export after shift)
         function exportData() {
             const records = localStorage.getItem('cae_logs');
             if (!records || JSON.parse(records).length === 0) {
@@ -2825,67 +3445,31 @@
             URL.revokeObjectURL(url);
         }
 
-        function triggerImport() {
-            document.getElementById('import-file').click();
-        }
-
-        function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (!Array.isArray(importedData)) throw new Error("Invalid format");
-
-                    let currentData = JSON.parse(localStorage.getItem('cae_logs') || '[]');
-                    let addedCount = 0;
-
-                    importedData.forEach(item => {
-                        if (!currentData.some(existing => existing.id === item.id)) {
-                            currentData.push(item);
-                            addedCount++;
-                        }
-                    });
-
-                    currentData.sort((a, b) => b.id - a.id);
-                    localStorage.setItem('cae_logs', JSON.stringify(currentData));
-                    populateYearFilter();
-                    renderRecords();
-                    calculateAllHistoricalSalary();
-                    updateSalaryDisplay();
-                    showAlert(`Successfully imported ${addedCount} new records.`);
-                } catch (err) {
-                    showAlert("Failed to import. Invalid JSON file.");
-                    console.error(err);
-                }
-                input.value = '';
-            };
-            reader.readAsText(file);
-        }
-
         /* --- SCROLL TO TOP FUNCTIONALITY --- */
         function initScrollToTop() {
-            const scrollTopButton = document.getElementById('scroll-top-btn');
+            const scrollBtn = document.getElementById('scroll-top-btn');
+            const shiftsPage = document.getElementById('shifts-page');
             
-            if (!scrollTopButton) {
-                console.log('Button not found');
-                return;
-            }
+            if (!scrollBtn || !shiftsPage) return;
             
-            // Always show button on records page
-            scrollTopButton.classList.add('visible');
+            // Listen to scroll events on the shifts page
+            shiftsPage.addEventListener('scroll', function() {
+                if (shiftsPage.scrollTop > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            });
         }
 
         function scrollToTop() {
-            const recordsPage = document.getElementById('records-page');
-            if (!recordsPage) return;
-            
-            recordsPage.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+            const shiftsPage = document.getElementById('shifts-page');
+            if (shiftsPage) {
+                shiftsPage.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
         }
 
         function hideScrollTopButton() {
@@ -2900,9 +3484,14 @@
         let salaryVisible = true;
 
         function loadSalaryVisibility() {
-            const saved = localStorage.getItem(SALARY_VISIBLE_KEY);
-            salaryVisible = saved !== null ? saved === 'true' : false;
-            updateSalaryVisibilityDisplay();
+            const saved = localStorage.getItem('cae_salary_visible');
+            salaryVisible = saved ? JSON.parse(saved) : false;  // Changed to default false (hidden)
+            
+            // Update button icon if it exists
+            const visBtn = document.getElementById('salary-visibility-btn');
+            if (visBtn) {
+                visBtn.innerText = salaryVisible ? '👁️' : '👁️‍🗨️';
+            }
         }
 
         function toggleSalaryVisibility() {
@@ -3018,6 +3607,262 @@
                 }
             });
         }
+
+        /* --- STATISTICS FUNCTIONS --- */
+        function renderStatistics() {
+            console.log('=== renderStatistics CALLED ===');
+            const logs = JSON.parse(localStorage.getItem('cae_logs') || '[]');
+            console.log('Total logs:', logs.length);
+            
+            if (logs.length === 0) {
+                console.log('No logs found, showing empty stats');
+                showEmptyStats();
+                return;
+            }
+            
+            const totalDays = logs.length;
+            const totalHours = logs.reduce((sum, log) => sum + getShiftHours(log.type), 0);
+            const totalActivities = logs.reduce((sum, log) => sum + (log.activities ? log.activities.length : 0), 0);
+            
+            document.getElementById('stat-total-days').innerText = totalDays;
+            document.getElementById('stat-total-hours').innerText = totalHours;
+            document.getElementById('stat-total-activities').innerText = totalActivities;
+            
+            const salaryHistory = JSON.parse(localStorage.getItem('cae_salary_history') || '[]');
+            const totalEarnings = salaryHistory.reduce((sum, month) => sum + month.totalSalary, 0);
+            if (totalEarnings > 0) {
+                document.getElementById('stat-total-earnings').innerText = '$' + totalEarnings.toFixed(0);
+            } else {
+                document.getElementById('stat-total-earnings').innerText = '-';
+            }
+            
+            console.log('Calling renderActivityBreakdown...');
+            renderActivityBreakdown(logs);
+            
+            console.log('Calling renderShiftDistribution...');
+            renderShiftDistribution(logs);
+            
+            console.log('Calling renderSimulatorUsage...');
+            renderSimulatorUsage(logs);
+            
+            console.log('Calling renderMonthlyTrend...');
+            renderMonthlyTrend(logs);
+            console.log('=== renderStatistics DONE ===');
+        }
+
+        function showEmptyStats() {
+            const emptyHTML = '<div class="empty-stats"><div class="empty-stats-icon">📊</div><div>No data yet</div></div>';
+            document.getElementById('activity-breakdown').innerHTML = emptyHTML;
+            document.getElementById('shift-distribution').innerHTML = emptyHTML;
+            document.getElementById('simulator-usage').innerHTML = emptyHTML;
+            document.getElementById('monthly-trend').innerHTML = emptyHTML;
+        }
+
+        function renderActivityBreakdown(logs) {
+            const activityCounts = {};
+            logs.forEach(log => {
+                if (log.activities) {
+                    log.activities.forEach(act => {
+                        const type = act.type || 'Other';
+                        activityCounts[type] = (activityCounts[type] || 0) + 1;
+                    });
+                }
+            });
+            
+            const sorted = Object.entries(activityCounts).sort((a, b) => b[1] - a[1]);
+            const maxCount = sorted[0] ? sorted[0][1] : 1;
+            let html = '';
+            const maxBarWidth = 150;
+            
+            sorted.forEach(([type, count]) => {
+                const barWidth = Math.round((count / maxCount) * maxBarWidth);
+                const shortType = type.replace('Morning Briefing', 'Briefing')
+                                    .replace('Session Change', 'Session')
+                                    .replace('Preflight Checks', 'Preflight')
+                                    .replace('Walk-Around Check', 'Walk-Around')
+                                    .replace('Preventive Maintenance', 'PM');
+                html += '<div class="chart-bar">';
+                html += '<div class="chart-bar-label">' + shortType + '</div>';
+                html += '<div class="chart-bar-visual" style="width: ' + barWidth + 'px;"></div>';
+                html += '<div class="chart-bar-value">' + count + '</div>';
+                html += '</div>';
+            });
+            
+            document.getElementById('activity-breakdown').innerHTML = html || '<div class="empty-stats"><div>No activities</div></div>';
+        }
+
+        function renderShiftDistribution(logs) {
+            const shiftCounts = {Regular: 0, Day: 0, Night: 0};
+            logs.forEach(log => {
+                if (log.type.includes('Regular')) shiftCounts.Regular++;
+                else if (log.type.includes('Day')) shiftCounts.Day++;
+                else if (log.type.includes('Night')) shiftCounts.Night++;
+            });
+            
+            const colors = {Regular: '#3b82f6', Day: '#10b981', Night: '#8b5cf6'};
+            const total = logs.length;
+            
+            // Create visual pie chart using conic-gradient
+            let html = '<div style="display: flex; flex-direction: column; align-items: center; gap: 15px; height: 100%;">';
+            
+            // Build gradient string
+            let gradientParts = [];
+            let currentPercent = 0;
+            Object.keys(shiftCounts).forEach(type => {
+                const count = shiftCounts[type];
+                if (count > 0) {
+                    const percentage = (count / total) * 100;
+                    gradientParts.push(colors[type] + ' ' + currentPercent + '% ' + (currentPercent + percentage) + '%');
+                    currentPercent += percentage;
+                }
+            });
+            
+            if (gradientParts.length > 0) {
+                html += '<div style="width: 120px; height: 120px; border-radius: 50%; background: conic-gradient(' + gradientParts.join(', ') + '); box-shadow: 0 4px 12px rgba(0,0,0,0.3);"></div>';
+            }
+            
+            // Legend
+            html += '<div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">';
+            Object.keys(shiftCounts).forEach(type => {
+                const count = shiftCounts[type];
+                if (count > 0) {
+                    const percentage = ((count / total) * 100).toFixed(1);
+                    html += '<div class="chart-donut-item">';
+                    html += '<div class="chart-donut-label">';
+                    html += '<div class="chart-donut-color" style="background: ' + colors[type] + ';"></div>';
+                    html += '<span>' + type + ' (' + percentage + '%)</span>';
+                    html += '</div>';
+                    html += '<div class="chart-donut-value">' + count + '</div>';
+                    html += '</div>';
+                }
+            });
+            html += '</div></div>';
+            
+            if (total === 0) {
+                html = '<div class="empty-stats"><div>No shifts</div></div>';
+            }
+            
+            document.getElementById('shift-distribution').innerHTML = html;
+        }
+
+        function renderSimulatorUsage(logs) {
+            const simCounts = {};
+            
+            logs.forEach(log => {
+                if (log.activities) {
+                    log.activities.forEach(act => {
+                        // Use 'sim' field instead of 'simulator'
+                        if (act.sim && act.sim !== '') {
+                            simCounts[act.sim] = (simCounts[act.sim] || 0) + 1;
+                        }
+                    });
+                }
+            });
+            
+            const sorted = Object.entries(simCounts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+            if (sorted.length === 0) {
+                document.getElementById('simulator-usage').innerHTML = '<div class="empty-stats"><div>No data</div></div>';
+                return;
+            }
+            
+            const maxCount = sorted[0][1];
+            let html = '';
+            const maxBarWidth = 120;
+            
+            sorted.forEach(([sim, count]) => {
+                const barWidth = Math.round((count / maxCount) * maxBarWidth);
+                html += '<div class="chart-bar">';
+                html += '<div class="chart-bar-label">' + sim + '</div>';
+                html += '<div class="chart-bar-visual" style="width: ' + barWidth + 'px; background: #10b981;"></div>';
+                html += '<div class="chart-bar-value">' + count + '</div>';
+                html += '</div>';
+            });
+            
+            document.getElementById('simulator-usage').innerHTML = html;
+        }
+
+        function renderMonthlyTrend(logs) {
+            // Get all available years
+            const yearSet = new Set();
+            const monthlyData = {};
+            
+            logs.forEach(log => {
+                const date = new Date(log.date);
+                const year = date.getFullYear();
+                const month = date.getMonth();
+                const monthKey = year + '-' + String(month + 1).padStart(2, '0');
+                const hours = getShiftHours(log.type);
+                
+                yearSet.add(year);
+                monthlyData[monthKey] = (monthlyData[monthKey] || 0) + hours;
+            });
+            
+            availableYears = Array.from(yearSet).sort();
+            
+            // Show/hide year navigation
+            const yearNav = document.getElementById('year-nav');
+            if (availableYears.length > 1) {
+                yearNav.style.display = 'flex';
+            } else {
+                yearNav.style.display = 'none';
+            }
+            
+            // Ensure current year is valid
+            if (!availableYears.includes(currentMonthlyYear) && availableYears.length > 0) {
+                currentMonthlyYear = availableYears[availableYears.length - 1]; // Default to latest year
+            }
+            
+            // Update year display
+            document.getElementById('monthly-year-display').innerText = '(' + currentMonthlyYear + ')';
+            document.getElementById('year-indicator').innerText = currentMonthlyYear;
+            
+            // Filter data for current year
+            const currentYearData = [];
+            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            for (let m = 0; m < 12; m++) {
+                const monthKey = currentMonthlyYear + '-' + String(m + 1).padStart(2, '0');
+                if (monthlyData[monthKey]) {
+                    currentYearData.push({
+                        label: monthNames[m],
+                        hours: monthlyData[monthKey]
+                    });
+                }
+            }
+            
+            if (currentYearData.length === 0) {
+                document.getElementById('monthly-trend').innerHTML = '<div class="empty-stats"><div>No data for ' + currentMonthlyYear + '</div></div>';
+                return;
+            }
+            
+            const maxHours = Math.max(...currentYearData.map(d => d.hours));
+            let html = '<div class="chart-line-container">';
+            
+            currentYearData.forEach(data => {
+                const heightPercent = (data.hours / maxHours) * 100;
+                
+                html += '<div class="chart-line-bar">';
+                html += '<div class="chart-line-bar-value">' + data.hours + '</div>';
+                html += '<div class="chart-line-bar-visual" style="height: ' + heightPercent + '%;"></div>';
+                html += '<div class="chart-line-bar-label">' + data.label + '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            
+            document.getElementById('monthly-trend').innerHTML = html;
+        }
+
+        function changeMonthlyYear(direction) {
+            const currentIndex = availableYears.indexOf(currentMonthlyYear);
+            const newIndex = currentIndex + direction;
+            
+            if (newIndex >= 0 && newIndex < availableYears.length) {
+                currentMonthlyYear = availableYears[newIndex];
+                const logs = JSON.parse(localStorage.getItem('caelogs') || '[]');
+                renderMonthlyTrend(logs);
+            }
+        }
+
     </script>
 </body>
 </html>
