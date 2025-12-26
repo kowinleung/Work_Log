@@ -453,7 +453,18 @@
 
         /* Adjust page padding for tab bar */
         .page {
-            padding-bottom: 105px; /* Space for tab bar */
+            display: none;
+            flex-direction: column;
+            /* 
+            Add safe-area-inset-top to the top padding.
+            I recommend adding extra base pixels (e.g., 20px) so it's not glued to the notch.
+            */
+            padding: calc(20px + env(safe-area-inset-top)) 20px 105px 20px; 
+            
+            height: 100%;
+            box-sizing: border-box;
+            animation: fadeIn 0.3s ease-in-out;
+            overflow-y: auto;
         }
 
         /* Remove settings FAB since we have tab bar now */
