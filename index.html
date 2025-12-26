@@ -1119,20 +1119,27 @@
         }
 
         /* --- Statistics Page Styles --- */
+        /* Update this specific block */
         #stats-page.active {
             display: flex;
             flex-direction: column;
             height: 100vh;
-            padding: 20px;
-            padding-bottom: 110px;
+            
+            /* 
+            CRITICAL: Add the top padding here explicitly.
+            Use calc(20px + env(safe-area-inset-top)) to match other pages.
+            */
+            padding: calc(20px + env(safe-area-inset-top)) 20px 110px 20px;
+            
             box-sizing: border-box;
-            overflow: hidden;
+            overflow: hidden; /* This keeps the page non-scrollable, only inner charts scroll */
         }
 
         #stats-page .page-header {
-            flex-shrink: 0;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            flex-shrink: 0; /* Prevents it from being squished */
         }
-
         .stats-summary-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
