@@ -841,7 +841,7 @@
         /* Scroll to Top FAB */
         .scroll-top-fab {
             position: fixed;
-            bottom: 90px;  /* Changed from 30px to 90px to sit above tab bar */
+            bottom: calc(90px + env(safe-area-inset-bottom));  /* Changed from 30px to 90px to sit above tab bar */
             right: 30px;
             width: 60px;
             height: 60px;
@@ -857,7 +857,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             transition: opacity 0.3s ease, background 0.2s ease;
             z-index: 10;
-            opacity: 0;
+            opacity: 0;s
             pointer-events: none;
         }
 
