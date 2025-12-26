@@ -376,79 +376,73 @@
             display: block;
         }
         
-        /* Bottom Tab Bar - Floating Pill Style */
+        /* --- Bottom Tab Bar - Compact Floating Pill Style --- */
         .tab-bar {
             position: fixed;
-            bottom: 25px; /* Moved up from 10px to avoid home bar */
-            left: 50%; /* Center it */
-            transform: translateX(-50%); /* Center alignment */
-            width: 92%; /* Reduced from calc(100% - 30px) */
-            max-width: 380px; /* Limit maximum width for tablets */
+            bottom: calc(20px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%);
+            width: auto;
+            min-width: 320px;
+            max-width: 400px;
             height: 65px;
             background: rgba(26, 34, 74, 0.95);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 35px;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             align-items: center;
-            padding: 0 4px; /* Reduced from 8px */
-            padding-bottom: env(safe-area-inset-bottom);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            padding: 0 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             z-index: 1000;
-            border-radius: 40px; /* Increased from 30px to match iPhone corners */
-            box-sizing: border-box;
         }
 
-        /* Active Tab Indicator Pill */
         .tab-indicator {
             position: absolute;
             height: 50px;
-            width: 70px; /* Reduced from 80px */
+            width: 70px;  /* WIDER to cover text */
             background: var(--accent-color);
-            border-radius: 25px;
-            transition: left 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            border-radius: 25px; /* Increase radius for pill shape */
+            transition: left 0.3s cubic-bezier(0.25, 1.5, 0.5, 1);
             z-index: 0;
             top: 50%;
             transform: translateY(-50%);
-            box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.5);
         }
 
+        /* Ensure tab items are clickable and above the indicator */
         .tab-item {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex: 1;
-            padding: 6px; /* Reduced from 8px */
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            color: #8da4ef;
-            user-select: none;
-            position: relative;
             z-index: 1;
-            min-width: 60px; /* Reduced from 70px */
+            width: 60px;
+            height: 100%;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+            position: relative;
         }
 
-        .tab-item:active {
-            transform: scale(0.95);
+        .tab-item.active {
+            opacity: 1;
+            color: white;
         }
 
         .tab-icon {
-            font-size: 24px;
-            margin-bottom: 4px;
-            transition: all 0.2s ease;
+            font-size: 22px;
+            margin-bottom: 2px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
         }
 
         .tab-label {
-            font-size: 10px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            text-align: center; /* Ensure text is centered */
-            width: 100%; /* Take full width for proper centering */
         }
-
         .tab-item.active {
             color: #ffffff;
         }
@@ -2761,20 +2755,20 @@
         
         function updateTabIndicator(tabName) {
             const indicator = document.getElementById('tab-indicator');
-            if (!indicator) return;
             const activeTab = document.getElementById(`tab-${tabName}`);
-            if (!activeTab) return;
+            
+            if (!indicator || !activeTab) return;
+
             const tabBar = activeTab.parentElement;
             const tabBarRect = tabBar.getBoundingClientRect();
             const tabRect = activeTab.getBoundingClientRect();
-            const indicatorWidth = 70; // Updated to match CSS
-            // Calculate center position relative to tab
-            let leftPosition = (tabRect.left - tabBarRect.left) + (tabRect.width / 2) - (indicatorWidth / 2);
-            // Ensure the pill stays within bounds
-            const maxLeft = tabBarRect.width - indicatorWidth - 8;
-            const minLeft = 4;
-            leftPosition = Math.max(minLeft, Math.min(leftPosition, maxLeft));
-            indicator.style.left = leftPosition + 'px';
+            
+            // UPDATED WIDTH to match CSS
+            const indicatorWidth = 70; 
+
+            const centerPosition = (tabRect.left - tabBarRect.left) + (tabRect.width / 2) - (indicatorWidth / 2);
+
+            indicator.style.left = `${centerPosition}px`;
         }
         // Store current active tab
         let currentActiveTab = 'home';
