@@ -3191,7 +3191,7 @@
 
             localStorage.setItem(CURRENT_ACTIVITIES_KEY, JSON.stringify(currentActivities));
             setCurrentShift(draft);
-            history.back();
+            switchTab('home');
         }
 
         function validateShift() {
